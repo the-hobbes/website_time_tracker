@@ -1,0 +1,16 @@
+Chrome extension idea
+
+- query your browsing history for the top 10 most visited sites
+- display these in a list and a pie chart
+- is there a way to tell how long you've been on a site? Like active time? 
+- maybe have a blacklist of sites, and pop up a warning when you are visiting on of them?
+
+Get started: https://developer.chrome.com/extensions/getstarted
+
+Devguide: https://developer.chrome.com/extensions/devguide
+
+This could be a useful API: https://developer.chrome.com/extensions/history
+
+And a useful example: http://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/api/history/showHistory/typedUrls.js?revision=119883
+
+My repo: https://github.com/the-hobbes/PicGrabber
