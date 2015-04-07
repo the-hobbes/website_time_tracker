@@ -11,6 +11,8 @@
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
+        width: 400px;
+        height: 400px;
       }
       #status {
         /* avoid an excessively wide status text */
@@ -20,6 +22,25 @@
         max-width: 400px;
         min-width: 400px;
       }
+      .nav-button {
+        border: 1px solid black;
+        margin-bottom: 1px;
+        padding: 5px;
+      }
+      #nav-wrapper {
+        overflow: hidden; /* will contain if #sites-button is longer than 
+        #pie-chart-button */
+      }
+      #top-sites-button {
+        width: 45%;
+        float: left;
+        overflow: hidden; /* if you don't want #second to wrap below #first */
+      }
+      #pie-chart-button {
+        width: 45%;
+        float: right;
+      }
+
     </style>
 
     <!--
@@ -31,10 +52,22 @@
     <script src="top_10.js"></script>
   </head>
   <body>
-    <div id="status"></div>
+    <div id="nav-wrapper">
+      <div id="top-sites-button" class="nav-button">Top Sites</div>
+      <div id="pie-chart-button" class="nav-button">Pie Chart</div>
+    </div>
+    <hr>
+
+    <div id="top-sites-content" style="display:none;">
       <h3>Your top 10 sites for the past week</h3>
-      <ol id="top-sites">
+      <ol id="top-sites-list">
       </ol>
+    </div>
+
+    <div id="pie-chart-content" style="display:none;">
+      <p>A pie chart will go here.</p>
+    </div>
+
   </body>
 </html>
 

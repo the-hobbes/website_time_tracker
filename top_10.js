@@ -1,7 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-  buildTypedUrlList();
-});
-  
 function buildTypedUrlList() {
   // this function is largely unchanged from the google example
   var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
@@ -86,7 +82,7 @@ var printTopResults = function(topResults, allResults) {
 
     var line_item = document.createElement('li');
     line_item.appendChild(document.createTextNode(url + ' ' + count));  
-    var ordered_list = document.getElementById('top-sites');
+    var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
   }
 }
@@ -97,3 +93,39 @@ var createPieChart = function(topResults, allResults) {
     console.log(urlArray[i] + ' ' + urlToCount[urlArray[i]]);
   }
 }
+
+var addButtonListeners = function(){
+  var top_sites_button = document.getElementById('top-sites-button');
+  top_sites_button.addEventListener('click', function(){
+    console.log('clicked top-sites');
+    showHiddenContent(top_sites_button, 'top-sites-content');
+  });
+
+  var pie_chart_button = document.getElementById('pie-chart-button');
+  pie_chart_button.addEventListener('click', function() {
+    console.log('clicked pie chart');
+    showHiddenContent();
+  })
+}
+
+var showHiddenContent = function(callingButton, targetContent) {
+  // callingButton is the button that was clicked
+  // targetContent is the element that we want to show
+
+  var to_show = document.getElementById(targetContent);
+  to_show.style.display = 'block';
+}
+
+var hideContent = function(callingButton, targetContent) {
+  var to_hide = document.getElementById(targetContent);
+  to_hide.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  
+  // Function to add event listener to buttons
+  addButtonListeners();
+
+  // entry point into history api stuff
+  buildTypedUrlList(); 
+});
