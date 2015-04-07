@@ -76,12 +76,19 @@ function buildTypedUrlList() {
 var printTopResults = function(topResults, allResults) {
   // print the top 10 urls w/counts:
   for (var i in topResults.slice(0, 10)) {
-    // console.log(topResults[i] + ' ' + allResults[topResults[i]]);
     url = topResults[i];
     count = allResults[topResults[i]];
 
+    // grab the hostname from the url with this hack
+    var link_element = document.createElement('a');
+    link_element.href = url;
+    link_element.text = link_element.hostname;
+
+    // create an li for each site, and append the link created above
     var line_item = document.createElement('li');
-    line_item.appendChild(document.createTextNode(url + ' ' + count));  
+    line_item.appendChild(link_element);
+    
+    // append each line item to the appropriate ol element
     var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
   }
