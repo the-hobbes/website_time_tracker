@@ -83,11 +83,15 @@ var printTopResults = function(topResults, allResults) {
     var link_element = document.createElement('a');
     link_element.href = url;
     link_element.text = link_element.hostname;
+    link_element.title = url; // set hover text
 
     // create an li for each site, and append the link created above
     var line_item = document.createElement('li');
     line_item.appendChild(link_element);
-    
+    // add the count to the li
+    var count_text = document.createTextNode(', ' + count + ' times.');
+    line_item.appendChild(count_text);
+
     // append each line item to the appropriate ol element
     var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
