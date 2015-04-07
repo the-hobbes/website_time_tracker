@@ -98,26 +98,29 @@ var addButtonListeners = function(){
   var top_sites_button = document.getElementById('top-sites-button');
   top_sites_button.addEventListener('click', function(){
     console.log('clicked top-sites');
-    showHiddenContent(top_sites_button, 'top-sites-content');
+    showHiddenContent('pie-chart-content', 'top-sites-content');
   });
 
   var pie_chart_button = document.getElementById('pie-chart-button');
   pie_chart_button.addEventListener('click', function() {
     console.log('clicked pie chart');
-    showHiddenContent();
+    showHiddenContent('top-sites-content', 'pie-chart-content');
   })
 }
 
-var showHiddenContent = function(callingButton, targetContent) {
-  // callingButton is the button that was clicked
+var showHiddenContent = function(currentContent, targetContent) {
+  // currentContent is the content that is displayed right now
   // targetContent is the element that we want to show
+
+  hideContent(currentContent);
 
   var to_show = document.getElementById(targetContent);
   to_show.style.display = 'block';
+
 }
 
-var hideContent = function(callingButton, targetContent) {
-  var to_hide = document.getElementById(targetContent);
+var hideContent = function(currentContent) {
+  var to_hide = document.getElementById(currentContent);
   to_hide.style.display = 'none';
 }
 
