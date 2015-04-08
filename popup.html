@@ -1,54 +1,8 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
 <html>
   <head>
-    <title>Time Tracker Popup</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-        width: 400px;
-        height: 400px;
-      }
-      #status {
-        /* avoid an excessively wide status text */
-        white-space: pre;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        max-width: 400px;
-        min-width: 400px;
-      }
-      .nav-button {
-        border: 1px solid black;
-        margin-bottom: 1px;
-        padding: 5px;
-      }
-      #nav-wrapper {
-        overflow: hidden; /* will contain if #sites-button is longer than 
-        #pie-chart-button */
-      }
-      #top-sites-button {
-        width: 45%;
-        float: left;
-        overflow: hidden; /* if you don't want #second to wrap below #first */
-      }
-      #pie-chart-button {
-        width: 45%;
-        float: right;
-      }
-
-    </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
+    <title>Time Tracker</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
     <script src="top_10.js"></script>
   </head>
   <body>
@@ -65,7 +19,10 @@
     </div>
 
     <div id="pie-chart-content" style="display:none;">
-      <p>A pie chart will go here.</p>
+      <div class="pie" data-start="0" data-value="30"></div>
+      <div class="pie highlight" data-start="30" data-value="30"></div>
+      <div class="pie" data-start="60" data-value="40"></div>
+      <div class="pie big" data-start="100" data-value="260"></div>
     </div>
 
   </body>
