@@ -15,3 +15,7 @@ And a useful example: http://src.chromium.org/viewvc/chrome/trunk/src/chrome/com
 
 My repo: https://github.com/the-hobbes/PicGrabber
 
+Notes:
+dev console: https://console.developers.google.com/start/appengine
+time tracker public: http://time-tracker-api.appspot.com/
+local app engine: http://localhost:9080/
