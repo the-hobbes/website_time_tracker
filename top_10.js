@@ -68,8 +68,7 @@ function buildTypedUrlList() {
      return urlToCount[b] - urlToCount[a];
    });
 
-   printTopResults(urlArray, urlToCount);
-   // createPieChart(urlArray, urlToCount);   
+   printTopResults(urlArray, urlToCount);  
   };
 }
 
@@ -96,13 +95,16 @@ var printTopResults = function(topResults, allResults) {
     var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
   }
+  createPieChart(topResults, allResults); 
 }
 
 var createPieChart = function(topResults, allResults) {
   // print all the urls w/counts:
-  for (var i in urlArray) {
-    console.log(urlArray[i] + ' ' + urlToCount[urlArray[i]]);
-  }
+  // for (var i in urlArray) {
+  //   console.log(urlArray[i] + ' ' + urlToCount[urlArray[i]]);
+  // }
+
+
 }
 
 var addButtonListeners = function(){
