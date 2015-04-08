@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
@@ -14,10 +14,17 @@ def root():
 def receive_data():
     """Receive date from an ajax call."""
     # test with: 
-    # curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz""password":"xyz"}' http://localhost:9080/pie
+    # curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://localhost:9080/pie
     json_received = request.get_json()
     print json_received
-    return jsonify(json_received)
+    # return jsonify(json_received)
+    return render_template('render_pie.html')
+
+@app.errorhandler(400)
+def page_not_found(e):
+    """Return a custom 400 error."""
+    print e, request
+    return 'Bad Request.', 400
 
 @app.errorhandler(404)
 def page_not_found(e):
