@@ -100,42 +100,52 @@ var printTopResults = function(topResults, allResults) {
 
 var parseToJson = function(allResults) {
   var results_string = JSON.stringify(allResults);
-  var data = JSON.parse(results_string);
+  var results_object = JSON.parse(results_string);
+  var json_data = {};
 
-  return [
-      { 
-        "label": "One",
-        "value" : 29.765957771107
-      } , 
-      { 
-        "label": "Two",
-        "value" : 0
-      } , 
-      { 
-        "label": "Three",
-        "value" : 32.807804682612
-      } , 
-      { 
-        "label": "Four",
-        "value" : 196.45946739256
-      } , 
-      { 
-        "label": "Five",
-        "value" : 0.19434030906893
-      } , 
-      { 
-        "label": "Six",
-        "value" : 98.079782601442
-      } , 
-      { 
-        "label": "Seven",
-        "value" : 13.925743130903
-      } , 
-      { 
-        "label": "Eight",
-        "value" : 5.1387322875705
-      }
-    ];
+  for(var key in results_object) {
+    var url = key;
+    var count = results_object[key];
+    var tmp_object = {'url':url, 'count':count};
+    json_data.push(tmp_object);
+  }
+
+  // return data
+
+  // return [
+  //     { 
+  //       "label": "One",
+  //       "value" : 29.765957771107
+  //     } , 
+  //     { 
+  //       "label": "Two",
+  //       "value" : 0
+  //     } , 
+  //     { 
+  //       "label": "Three",
+  //       "value" : 32.807804682612
+  //     } , 
+  //     { 
+  //       "label": "Four",
+  //       "value" : 196.45946739256
+  //     } , 
+  //     { 
+  //       "label": "Five",
+  //       "value" : 0.19434030906893
+  //     } , 
+  //     { 
+  //       "label": "Six",
+  //       "value" : 98.079782601442
+  //     } , 
+  //     { 
+  //       "label": "Seven",
+  //       "value" : 13.925743130903
+  //     } , 
+  //     { 
+  //       "label": "Eight",
+  //       "value" : 5.1387322875705
+  //     }
+  //   ];
 
 }
 
