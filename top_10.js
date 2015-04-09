@@ -95,89 +95,40 @@ var printTopResults = function(topResults, allResults) {
     var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
   }
-  createPieChart(topResults, allResults); 
+  createPieChart(allResults); 
 }
 
-var parseToJson = function(allResults) {
-  // var results_string = JSON.stringify(allResults);
-  // var results_object = JSON.parse(results_string);
-  // var json_data = JSON.parse('{}');
+var parseToJson = function(data_object) {
+  var results = new Array();
 
-  var results = {};
-  // http://stackoverflow.com/questions/2295496/convert-array-to-json
-  for(var key in allResults) {
-    var url = key;
-    var count = allResults[key];
-    var tmp = {'url': url, 'count': count};
+  for(var key in data_object) {
+    var tmp = new Object();
+    tmp.label = key;
+    tmp.value = data_object[key];
+    
     results.push(tmp);
   }
 
-  console.log(results);
-  // return data
-
-  // return [
-  //     { 
-  //       "label": "One",
-  //       "value" : 29.765957771107
-  //     } , 
-  //     { 
-  //       "label": "Two",
-  //       "value" : 0
-  //     } , 
-  //     { 
-  //       "label": "Three",
-  //       "value" : 32.807804682612
-  //     } , 
-  //     { 
-  //       "label": "Four",
-  //       "value" : 196.45946739256
-  //     } , 
-  //     { 
-  //       "label": "Five",
-  //       "value" : 0.19434030906893
-  //     } , 
-  //     { 
-  //       "label": "Six",
-  //       "value" : 98.079782601442
-  //     } , 
-  //     { 
-  //       "label": "Seven",
-  //       "value" : 13.925743130903
-  //     } , 
-  //     { 
-  //       "label": "Eight",
-  //       "value" : 5.1387322875705
-  //     }
-  //   ];
-
+  return results;
 }
 
-var createPieChart = function(topResults, allResults) {  
-  // for(var key in obj) {
-  //   var attrName = key;
-  //   var attrValue = obj[key];
-  // }
-
-  // json isn't formatted properly. Needs to be comprised of objects with two
-  // key/value pairs each: {"url":"www...", "count:x"}, like:
-  // var data=[{"crimeType":"mip","totalCrimes":24},{"crimeType":"theft","totalCrimes":558}];    
-  
+var createPieChart = function(allResults) {    
   data = parseToJson(allResults);
+  console.log(data);
 
-  // nv.addGraph(function() {
-  // var chart = nv.models.pieChart()
-  //     .x(function(d) { return d.label })
-  //     .y(function(d) { return d.value })
-  //     .showLabels(true);
+  nv.addGraph(function() {
+  var chart = nv.models.pieChart()
+      .x(function(d) { return d.label })
+      .y(function(d) { return d.value })
+      .showLabels(true);
 
-  //   d3.select("#pie-chart-content svg")
-  //       .datum(data)
-  //       .transition().duration(350)
-  //       .call(chart);
+    d3.select("#pie-chart-content svg")
+        .datum(data)
+        .transition().duration(350)
+        .call(chart);
 
-  //   return chart;
-  // });
-
+    return chart;
+  });
 }
 
 var addButtonListeners = function(){
@@ -189,7 +140,6 @@ var addButtonListeners = function(){
 
   var pie_chart_button = document.getElementById('pie-chart-button');
   pie_chart_button.addEventListener('click', function() {
-    console.log('clicked pie chart');
     showHiddenContent('top-sites-content', 'pie-chart-content');
   })
 }
