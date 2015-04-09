@@ -99,17 +99,20 @@ var printTopResults = function(topResults, allResults) {
 }
 
 var parseToJson = function(allResults) {
-  var results_string = JSON.stringify(allResults);
-  var results_object = JSON.parse(results_string);
-  var json_data = {};
+  // var results_string = JSON.stringify(allResults);
+  // var results_object = JSON.parse(results_string);
+  // var json_data = JSON.parse('{}');
 
-  for(var key in results_object) {
+  var results = {};
+  // http://stackoverflow.com/questions/2295496/convert-array-to-json
+  for(var key in allResults) {
     var url = key;
-    var count = results_object[key];
-    var tmp_object = {'url':url, 'count':count};
-    json_data.push(tmp_object);
+    var count = allResults[key];
+    var tmp = {'url': url, 'count': count};
+    results.push(tmp);
   }
 
+  console.log(results);
   // return data
 
   // return [
@@ -161,19 +164,19 @@ var createPieChart = function(topResults, allResults) {
   
   data = parseToJson(allResults);
 
-  nv.addGraph(function() {
-  var chart = nv.models.pieChart()
-      .x(function(d) { return d.label })
-      .y(function(d) { return d.value })
-      .showLabels(true);
+  // nv.addGraph(function() {
+  // var chart = nv.models.pieChart()
+  //     .x(function(d) { return d.label })
+  //     .y(function(d) { return d.value })
+  //     .showLabels(true);
 
-    d3.select("#pie-chart-content svg")
-        .datum(data)
-        .transition().duration(350)
-        .call(chart);
+  //   d3.select("#pie-chart-content svg")
+  //       .datum(data)
+  //       .transition().duration(350)
+  //       .call(chart);
 
-    return chart;
-  });
+  //   return chart;
+  // });
 
 }
 
