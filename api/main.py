@@ -8,7 +8,9 @@ app.config['DEBUG'] = True
 @app.route('/')
 def root():
     """Handle requests for app root."""
-    return 'Root of the application.'
+    # currently, just renders the placeholder pie chart
+    
+    return render_template('render_pie.html')
 
 @app.route('/pie', methods=['POST'])
 def receive_data():
