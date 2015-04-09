@@ -151,16 +151,14 @@ var createPieChart = function(topResults, allResults) {
   
   data = parseToJson(allResults);
 
-  console.log('stop here');
-
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
       .showLabels(true);
 
-    d3.select("#chart svg")
-        .datum(exampleData())
+    d3.select("#pie-chart-content svg")
+        .datum(data)
         .transition().duration(350)
         .call(chart);
 
