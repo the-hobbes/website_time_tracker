@@ -138,6 +138,7 @@ var hideContent = function(currentContent) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  d3.select('#pie-id').text('D3 was here');
   // Function to add event listener to buttons
   addButtonListeners();
 
