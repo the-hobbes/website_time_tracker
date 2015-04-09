@@ -138,7 +138,6 @@ var hideContent = function(currentContent) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  
   // Function to add event listener to buttons
   addButtonListeners();
 
