@@ -11,8 +11,6 @@
   },
   "permissions": [
     "activeTab",
-    "tabs",
-    "https://d3js.org/d3.v3.min.js",
     "history"
   ],
   "content_scripts": [

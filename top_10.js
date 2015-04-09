@@ -98,12 +98,61 @@ var printTopResults = function(topResults, allResults) {
   createPieChart(topResults, allResults); 
 }
 
-var createPieChart = function(topResults, allResults) {
-  // print all the urls w/counts:
-  // for (var i in urlArray) {
-  //   console.log(urlArray[i] + ' ' + urlToCount[urlArray[i]]);
+var createPieChart = function(topResults, allResults) {  
+  // for(var key in obj) {
+  //   var attrName = key;
+  //   var attrValue = obj[key];
   // }
 
+  // json isn't formatted properly. Needs to be comprised of objects with two
+  // key/value pairs each: {"url":"www...", "count:x"}, like:
+  // var data=[{"crimeType":"mip","totalCrimes":24},{"crimeType":"theft","totalCrimes":558}];    
+  
+  var results_string = JSON.stringify(allResults);
+  var data = JSON.parse(results_string);
+
+  console.log('stop here');
+
+  var width = 960,
+      height = 500,
+      radius = Math.min(width, height) / 2;
+
+  var color = d3.scale.ordinal()
+      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+  var arc = d3.svg.arc()
+      .outerRadius(radius - 10)
+      .innerRadius(0);
+
+  var pie = d3.layout.pie()
+      .sort(null)
+      .value(function(d) { return d.population; });
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+  data.forEach(function(d) {
+    d.population = +d.population;
+  });
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.age); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.age; });
 
 }
 
@@ -136,6 +185,7 @@ var hideContent = function(currentContent) {
   var to_hide = document.getElementById(currentContent);
   to_hide.style.display = 'none';
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
   d3.select('#pie-id').text('D3 was here');
