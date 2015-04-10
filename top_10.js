@@ -113,14 +113,15 @@ var createPieChart = function(allResults) {
   var chart = nv.models.pieChart()
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
-      .labelThreshold(.05)
-      .showLegend(false)
-      .showLabels(true);
+      .showLegend(true)
+      .showLabels(false);
 
   d3.select("#pie-chart-content svg")
         .datum(data)
         .transition().duration(350)
         .call(chart);
+
+  // d3.select(".nv-legendWrap").attr("transform", "scale(1)");
 
     return chart;
   });

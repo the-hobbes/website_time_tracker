@@ -1,8 +1,8 @@
 body {
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   font-size: 100%;
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
 }
 .nav-button {
   border: 1px solid black;
@@ -23,6 +23,11 @@ body {
   float: right;
 }
 #pie-chart-content {
-  /*width: 300px;*/
   margin:0px auto;
+}
+
+/*pie legend styling*/
+g.nv-legendWrap.nvd3-svg {
+  position: absolute;
+  float: left;
 }
