@@ -73,6 +73,8 @@ function buildTypedUrlList() {
 }
 
 var printTopResults = function(topResults, allResults) {
+  top_results_array = new Array(); // object to store pie chart data
+
   // print the top 10 urls w/counts:
   for (var i in topResults.slice(0, 10)) {
     url = topResults[i];
@@ -94,35 +96,28 @@ var printTopResults = function(topResults, allResults) {
     // append each line item to the appropriate ol element
     var ordered_list = document.getElementById('top-sites-list');
     ordered_list.appendChild(line_item);
-  }
-  createPieChart(allResults); 
-}
 
-var parseToJson = function(data_object) {
-  var results = new Array();
-
-  for(var key in data_object) {
+    // this is massaged data for the pie chart
     var tmp = new Object();
-    tmp.label = key;
-    tmp.value = data_object[key];
-    
-    results.push(tmp);
+    tmp.label = link_element.hostname;
+    tmp.value = count;
+    top_results_array.push(tmp);
   }
-
-  return results;
+  createPieChart(top_results_array); 
 }
 
 var createPieChart = function(allResults) {    
-  data = parseToJson(allResults);
-  console.log(data);
+  var data = allResults
 
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
+      .labelThreshold(.05)
+      .showLegend(false)
       .showLabels(true);
 
-    d3.select("#pie-chart-content svg")
+  d3.select("#pie-chart-content svg")
         .datum(data)
         .transition().duration(350)
         .call(chart);
@@ -162,7 +157,6 @@ var hideContent = function(currentContent) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  d3.select('#pie-id').text('D3 was here');
   // Function to add event listener to buttons
   addButtonListeners();
 
