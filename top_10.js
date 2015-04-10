@@ -113,8 +113,9 @@ var createPieChart = function(allResults) {
   var chart = nv.models.pieChart()
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
-      .showLegend(true)
-      .showLabels(false);
+      .showLegend(false)
+      .labelType("percent")
+      .showLabels(true);
 
   d3.select("#pie-chart-content svg")
         .datum(data)

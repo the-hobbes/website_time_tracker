@@ -31,3 +31,12 @@ g.nv-legendWrap.nvd3-svg {
   position: absolute;
   float: left;
 }
+
+/* pie styling */
+svg {
+  height:300px; 
+  width:400px; 
+  display: block; 
+  margin:0px auto; 
+  padding: 50px;  
+}
