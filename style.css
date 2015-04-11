@@ -4,6 +4,20 @@ body {
   width: 500px;
   height: 500px;
 }
+
+/* top sites styling */
+li:nth-child(odd) { 
+  background: #E6FBFF; 
+}
+li {
+  margin-bottom: 5px;
+  padding: 1px;
+}
+#top-sites-content ol {
+  width: 400px;
+  margin: 0px auto;
+}
+
 .nav-button {
   border: 1px solid black;
   margin-bottom: 1px;
