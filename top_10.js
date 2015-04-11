@@ -111,18 +111,16 @@ var createPieChart = function(allResults) {
 
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
-      .x(function(d) { return d.label })
-      .y(function(d) { return d.value })
-      .showLegend(false)
-      .labelType("percent")
-      .showLabels(true);
+    .x(function(d) { return d.label })
+    .y(function(d) { return d.value })
+    .showLegend(true)
+    .labelType("percent")
+    .showLabels(true);
 
   d3.select("#pie-chart-content svg")
-        .datum(data)
-        .transition().duration(350)
-        .call(chart);
-
-  // d3.select(".nv-legendWrap").attr("transform", "scale(1)");
+    .datum(data)
+    .transition().duration(350)
+    .call(chart);
 
     return chart;
   });
