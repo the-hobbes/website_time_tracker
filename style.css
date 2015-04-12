@@ -48,9 +48,16 @@ g.nv-legendWrap.nvd3-svg {
 
 /* pie styling */
 svg {
-  height:300px; 
+  height:400px; 
   width:400px; 
   display: block; 
   margin:0px auto; 
   padding: 50px;  
+}
+.nvtooltip { 
+  position: absolute;
+  top:20px;
+  left: 20%;
+  padding: 5px;
+  /*margin-right: -50px; */
 }
