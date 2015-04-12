@@ -1,5 +1,4 @@
 function buildTypedUrlList() {
-  // this function is largely unchanged from the google example
   var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
   var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
 
@@ -32,20 +31,21 @@ function buildTypedUrlList() {
   });  
 
   // Maps URLs to a count of the number of times the user visited that URL
-  var urlToCount = {};
+  var urlCountObject = {};
   
   // Callback for chrome.history.getVisits().  Counts the number of
   // times a user visited a URL.
   var processVisits = function(url, visitItems) {
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
-      var link_element = document.createElement('a');
-      link_element.href = url;
+      // hack to get simple domains from a given url
+      var linkElement = document.createElement('a');
+      linkElement.href = url;
 
-      if (!urlToCount[link_element.hostname]) {
-        urlToCount[link_element.hostname] = 0;
+      if (!urlCountObject[linkElement.hostname]) {
+        urlCountObject[linkElement.hostname] = 0;
       }
 
-      urlToCount[link_element.hostname]++;
+      urlCountObject[linkElement.hostname]++;
     }
 
     // If this is the final outstanding call to processVisits(),
@@ -58,60 +58,57 @@ function buildTypedUrlList() {
   
   // This function is called when we have the final list of URls to display.
   var onAllVisitsProcessed = function() {
-   // Get the top scoring urls.
-   urlArray = [];
-   for (var url in urlToCount) {
-     urlArray.push(url);
+   sortedUrlArray = [];
+   for (var url in urlCountObject) {
+     sortedUrlArray.push(url);
    }
 
    // Sort the URLs by the number of times the user typed them.
-   urlArray.sort(function(a, b) {
-     return urlToCount[b] - urlToCount[a];
+   sortedUrlArray.sort(function(a, b) {
+     return urlCountObject[b] - urlCountObject[a];
    });
 
-   // urlArray-> sorted array
-   // urlToCount-> full object
-   printTopResults(urlArray, urlToCount);  
+   printTopResults(sortedUrlArray, urlCountObject);  
   };
 }
 
-var printTopResults = function(topResults, allResults) {
-  top_results_array = new Array(); // object to store pie chart data
+var printTopResults = function(sortedUrlArray, urlCountObject) {
+  pieChartData = new Array(); // object to store pie chart data
 
-  for (var i in topResults) {
-    url = topResults[i];
-    count = allResults[topResults[i]];
+  for (var i in sortedUrlArray) {
+    url = sortedUrlArray[i];
+    count = urlCountObject[sortedUrlArray[i]];
 
     // grab the hostname from the url with this hack
-    var link_element = document.createElement('a');
-    link_element.href = 'http://' + url;
-    link_element.text = url;
-    link_element.target = 'blank';
+    var linkElement = document.createElement('a');
+    linkElement.href = 'http://' + url;
+    linkElement.text = url;
+    linkElement.target = 'blank';
 
     // create an li for each site, and append the link created above
-    var line_item = document.createElement('li');
-    line_item.appendChild(link_element);
+    var lineItemElement = document.createElement('li');
+    lineItemElement.appendChild(linkElement);
     // add the count to the li
-    var count_text = document.createTextNode(', ' + count + ' times.');
-    line_item.appendChild(count_text);
+    var countText = document.createTextNode(', ' + count + ' times.');
+    lineItemElement.appendChild(countText);
 
     if (i <= 9) { // print the top 10 urls w/counts:
       // append each line item to the appropriate ol element
-      var ordered_list = document.getElementById('top-sites-list');
-      ordered_list.appendChild(line_item);
+      var orderedListElement = document.getElementById('top-sites-list');
+      orderedListElement.appendChild(lineItemElement);
     }
 
     // this is massaged data for the pie chart
     var tmp = new Object();
     tmp.label = url;
     tmp.value = count;
-    top_results_array.push(tmp);
+    pieChartData.push(tmp);
   }
-  createPieChart(top_results_array); 
+  createPieChart(pieChartData); 
 }
 
-var createPieChart = function(top_results_array) {    
-  var data = top_results_array
+var createPieChart = function(pieChartData) {    
+  var data = pieChartData
 
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
@@ -131,13 +128,13 @@ var createPieChart = function(top_results_array) {
 }
 
 var addButtonListeners = function(){
-  var top_sites_button = document.getElementById('top-sites-button');
-  top_sites_button.addEventListener('click', function(){
+  var topSitesButton = document.getElementById('top-sites-button');
+  topSitesButton.addEventListener('click', function(){
     showHiddenContent('pie-chart-content', 'top-sites-content');
   });
 
-  var pie_chart_button = document.getElementById('pie-chart-button');
-  pie_chart_button.addEventListener('click', function() {
+  var pieChartButton = document.getElementById('pie-chart-button');
+  pieChartButton.addEventListener('click', function() {
     showHiddenContent('top-sites-content', 'pie-chart-content');
   })
 }
@@ -148,14 +145,14 @@ var showHiddenContent = function(currentContent, targetContent) {
 
   hideContent(currentContent);
 
-  var to_show = document.getElementById(targetContent);
-  to_show.style.display = 'block';
+  var toShow = document.getElementById(targetContent);
+  toShow.style.display = 'block';
 
 }
 
 var hideContent = function(currentContent) {
-  var to_hide = document.getElementById(currentContent);
-  to_hide.style.display = 'none';
+  var toHide = document.getElementById(currentContent);
+  toHide.style.display = 'none';
 }
 
 
