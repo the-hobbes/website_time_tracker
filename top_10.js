@@ -2,6 +2,9 @@ function buildTypedUrlList() {
   var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
   var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
 
+  var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
+  var oneMonthAgo =(new Date).getTime() - microsecondsPerMonth; 
+
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
   var numRequestsOutstanding = 0;
