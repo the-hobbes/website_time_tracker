@@ -1,10 +1,9 @@
 body {
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   font-size: 100%;
-  width: 500px;
-  height: 500px;
+  width: 700px;
+  height: 900px;
 }
-
 /* top sites styling */
 li:nth-child(odd) { 
   background: #E6FBFF; 
@@ -14,10 +13,8 @@ li {
   padding: 1px;
 }
 #top-sites-content ol {
-  width: 400px;
   margin: 0px auto;
 }
-
 .nav-button {
   border: 1px solid black;
   margin-bottom: 1px;
@@ -37,27 +34,12 @@ li {
   float: right;
 }
 #pie-chart-content {
+  width: 600px;
   margin:0px auto;
 }
-
-/*pie legend styling*/
-g.nv-legendWrap.nvd3-svg {
-  position: absolute;
-  float: left;
+#chart svg {
+  height: 400px;
+  width: 600px; 
 }
-
-/* pie styling */
-svg {
-  height:400px; 
-  width:400px; 
-  display: block; 
-  margin:0px auto; 
-  padding: 50px;  
-}
-.nvtooltip { 
-  position: absolute;
-  top:20px;
-  left: 20%;
-  padding: 5px;
-  /*margin-right: -50px; */
+.nvtooltip {
 }

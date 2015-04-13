@@ -118,10 +118,12 @@ var createPieChart = function(pieChartData) {
     .labelType("percent")
     .showLabels(true);
 
-  d3.select("#pie-chart-content svg")
+  d3.select("#chart svg")
     .datum(data)
-    .transition().duration(350)
+    .transition().duration(1200)
     .call(chart);
+
+  d3.select(".nv-tooltip").attr("transform", "left:50%;");
 
     return chart;
   });
