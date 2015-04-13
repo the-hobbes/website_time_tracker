@@ -121,9 +121,9 @@ var createPieChart = function(pieChartData) {
   d3.select("#chart svg")
     .datum(data)
     .transition().duration(1200)
-    .call(chart);
+    .call(chart)
 
-  d3.select(".nv-tooltip").attr("transform", "left:50%;");
+  d3.select(".nv-tooltip").attr("transform", "left:-50%;");
 
     return chart;
   });

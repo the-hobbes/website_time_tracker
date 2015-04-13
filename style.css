@@ -21,8 +21,7 @@ li {
   padding: 5px;
 }
 #nav-wrapper {
-  overflow: hidden; /* will contain if #sites-button is longer than 
-                       #pie-chart-button */
+  overflow: hidden; /* will contain if #sites-button is longer than #pie-chart-button */
 }
 #top-sites-button {
   width: 45%;
@@ -42,4 +41,11 @@ li {
   width: 600px; 
 }
 .nvtooltip {
+  position: absolute;
+  text-align: center;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  border: 0px;
+  pointer-events: none;
 }
