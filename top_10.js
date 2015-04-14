@@ -119,14 +119,14 @@ var createPieChart = function(pieChartData) {
     .y(function(d) { return d.value })
     .showLegend(false)
     .labelType("percent")
+    .tooltipContent(function(key, y, e, graph) { return key + ', ' + 
+      e.value + ' visits.' })
     .showLabels(true);
 
   d3.select("#chart svg")
     .datum(data)
     .transition().duration(1200)
-    .call(chart)
-
-  d3.select(".nv-tooltip").attr("transform", "left:-50%;");
+    .call(chart);
 
     return chart;
   });
