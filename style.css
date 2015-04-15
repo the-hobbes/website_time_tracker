@@ -33,7 +33,7 @@ li {
   float: right;
 }
 #pie-chart-content {
-  width: 600px;
+  width: auto;
   margin:0px auto;
 }
 #chart svg {
