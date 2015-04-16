@@ -1,3 +1,5 @@
+// global vars
+
 var TOP_SITES_CONTENT_ID = 'top-sites-content';
 var PIE_CHART_CONTENT_ID = 'pie-chart-content';
 
@@ -153,7 +155,8 @@ var addButtonListeners = function(){
   })
 }
 
-var showHiddenContent = function(currentContent, targetContent, callingButton, currentButton) {
+var showHiddenContent = function(currentContent, targetContent, callingButton, 
+  currentButton) {
   // currentContent is the content that is displayed right now
   // targetContent is the element that we want to show
   // callingButton is the button that was clicked to fire the event
