@@ -15,7 +15,10 @@ function buildTypedUrlList() {
   var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
 
   var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
-  var oneMonthAgo =(new Date).getTime() - microsecondsPerMonth; 
+  var oneMonthAgo = (new Date).getTime() - microsecondsPerMonth; 
+
+  var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
+  var oneYearAgo = (new Date).getTime() - microsecondsPerYear; 
 
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
@@ -23,7 +26,7 @@ function buildTypedUrlList() {
 
   chrome.history.search({
     'text': '',              // Return every history item...
-    'startTime': oneWeekAgo  // that was accessed less than one week ago.
+    'startTime': microsecondsPerMonth  // accessed less than one month ago.
     },
    function(historyItems) {
     // For each history item, get details on all visits.
