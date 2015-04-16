@@ -1,3 +1,9 @@
+var TOP_SITES_CONTENT_ID = 'top-sites-content';
+var PIE_CHART_CONTENT_ID = 'pie-chart-content';
+
+var TOP_SITES_BUTTON_ID = 'top-sites-button';
+var PIE_CHART_BUTTON_ID = 'pie-chart-button';
+
 function buildTypedUrlList() {
   var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
   var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
@@ -133,31 +139,40 @@ var createPieChart = function(pieChartData) {
 }
 
 var addButtonListeners = function(){
-  var topSitesButton = document.getElementById('top-sites-button');
+  var topSitesButton = document.getElementById(TOP_SITES_BUTTON_ID);
+  var pieChartButton = document.getElementById(PIE_CHART_BUTTON_ID);
+
   topSitesButton.addEventListener('click', function(){
-    showHiddenContent('pie-chart-content', 'top-sites-content');
+    showHiddenContent(PIE_CHART_CONTENT_ID, TOP_SITES_CONTENT_ID, 
+      topSitesButton, pieChartButton);
   });
 
-  var pieChartButton = document.getElementById('pie-chart-button');
   pieChartButton.addEventListener('click', function() {
-    showHiddenContent('top-sites-content', 'pie-chart-content');
+    showHiddenContent(TOP_SITES_CONTENT_ID, PIE_CHART_CONTENT_ID, 
+      pieChartButton, topSitesButton);
   })
 }
 
-var showHiddenContent = function(currentContent, targetContent) {
+var showHiddenContent = function(currentContent, targetContent, callingButton, currentButton) {
   // currentContent is the content that is displayed right now
   // targetContent is the element that we want to show
+  // callingButton is the button that was clicked to fire the event
+  var displayStyle = 'block';
+  var borderColor = 'white';
 
-  hideContent(currentContent);
+  hideContent(currentContent, currentButton);
 
   var toShow = document.getElementById(targetContent);
-  toShow.style.display = 'block';
-
+  toShow.style.display = displayStyle;
+  callingButton.style.borderBottomColor = borderColor;
 }
 
-var hideContent = function(currentContent) {
+var hideContent = function(currentContent, currentButton) {
   var toHide = document.getElementById(currentContent);
+  var borderColor = 'black';
+  
   toHide.style.display = 'none';
+  currentButton.style.borderBottomColor = borderColor;
 }
 
 

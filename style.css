@@ -15,6 +15,10 @@ li {
 #top-sites-content ol {
   margin: 0px auto;
 }
+#main-content {
+  border: 1px solid black;
+  margin-top: -2px;
+}
 .nav-button {
   border: 1px solid black;
   margin-bottom: 1px;
@@ -27,6 +31,7 @@ li {
   width: 45%;
   float: left;
   overflow: hidden; /* if you don't want #second to wrap below #first */
+  border-bottom-color: white;
 }
 #pie-chart-button {
   width: 45%;
