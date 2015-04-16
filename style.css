@@ -1,23 +1,15 @@
+/*general styling*/
 body {
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   font-size: 100%;
-  width: 700px;
-  height: 900px;
-}
-/* top sites styling */
-li:nth-child(odd) { 
-  background: #E6FBFF; 
-}
-li {
-  margin-bottom: 5px;
-  padding: 1px;
-}
-#top-sites-content ol {
-  margin: 0px auto;
 }
 #main-content {
   border: 1px solid black;
   margin-top: -2px;
+  width: 600px;
+  height: 500px;
+  padding: 5px;
+  background-color: whitesmoke;
 }
 .nav-button {
   border: 1px solid black;
@@ -27,12 +19,27 @@ li {
 #nav-wrapper {
   overflow: hidden; /* will contain if #sites-button is longer than #pie-chart-button */
 }
+
+/* top-sites tab */
+#top-sites-content ol {
+  margin: 0px auto;
+}
 #top-sites-button {
   width: 45%;
   float: left;
   overflow: hidden; /* if you don't want #second to wrap below #first */
-  border-bottom-color: white;
+  border-bottom-color: whitesmoke;
+  background-color: whitesmoke;
 }
+li:nth-child(odd) { 
+  background: #E6FBFF; 
+}
+li {
+  margin-bottom: 5px;
+  padding: 1px;
+}
+
+/*pie-chart tab*/
 #pie-chart-button {
   width: 45%;
   float: right;
@@ -41,9 +48,11 @@ li {
   width: auto;
   margin:0px auto;
 }
+
+/*pie chart specific*/
 #chart svg {
-  height: 400px;
   width: 600px; 
+  height: 400px;
 }
 .nvtooltip {
     font-size: 12px;

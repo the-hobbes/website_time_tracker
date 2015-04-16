@@ -6,6 +6,10 @@ var PIE_CHART_CONTENT_ID = 'pie-chart-content';
 var TOP_SITES_BUTTON_ID = 'top-sites-button';
 var PIE_CHART_BUTTON_ID = 'pie-chart-button';
 
+var ACTIVE_BACKGROUND_COLOR = 'whitesmoke';
+var DORMANT_BACKGROUND_COLOR = 'white';
+var BORDER_COLOR = 'black';
+
 function buildTypedUrlList() {
   var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
   var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
@@ -161,21 +165,22 @@ var showHiddenContent = function(currentContent, targetContent, callingButton,
   // targetContent is the element that we want to show
   // callingButton is the button that was clicked to fire the event
   var displayStyle = 'block';
-  var borderColor = 'white';
 
   hideContent(currentContent, currentButton);
 
   var toShow = document.getElementById(targetContent);
   toShow.style.display = displayStyle;
-  callingButton.style.borderBottomColor = borderColor;
+  callingButton.style.borderBottomColor = ACTIVE_BACKGROUND_COLOR;
+  callingButton.style.backgroundColor = ACTIVE_BACKGROUND_COLOR;
 }
 
 var hideContent = function(currentContent, currentButton) {
+  // set styling to default
   var toHide = document.getElementById(currentContent);
-  var borderColor = 'black';
   
   toHide.style.display = 'none';
-  currentButton.style.borderBottomColor = borderColor;
+  currentButton.style.borderBottomColor = BORDER_COLOR;
+  currentButton.style.backgroundColor = DORMANT_BACKGROUND_COLOR;
 }
 
 
