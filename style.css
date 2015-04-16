@@ -15,6 +15,7 @@ body {
   border: 1px solid black;
   margin-bottom: 1px;
   padding: 5px;
+  cursor: pointer;
 }
 #nav-wrapper {
   overflow: hidden; /* will contain if #sites-button is longer than #pie-chart-button */
