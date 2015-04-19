@@ -16,7 +16,14 @@
     </div>
     <div id="main-content">
       <div id="top-sites-content">
-        <h2>Your top 10 sites for the past month:</h2>
+        <h2>Your top 10 sites for the past 
+          <select id="timesliceSelectBox" name="select">
+            <option value="1">Week</option> 
+            <option value="2" selected>Month</option>
+            <option value="3">Year</option>
+          </select>
+        :</h2>
+        
         <ol id="top-sites-list">
         </ol>
       </div>
