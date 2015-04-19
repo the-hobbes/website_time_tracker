@@ -5,6 +5,7 @@ var TOP_SITES_BUTTON_ID = 'top-sites-button';
 var PIE_CHART_BUTTON_ID = 'pie-chart-button';
 var TIMESLICE_SELECT_ID = 'timesliceSelectBox';
 var TOP_SITES_LIST_ID = 'top-sites-list';
+var TIME_LABEL_ID = 'time-label-span';
 
 // default coloring
 var ACTIVE_BACKGROUND_COLOR = '#FCFCFC';
@@ -230,6 +231,9 @@ var addTimesliceListeners = function() {
   timesliceSelectBox.onchange = function (e) {
     var selectedOption = this[this.selectedIndex];
     var selectedValue = selectedOption.value;
+    var timesliceLabelDisplay = document.getElementById(TIME_LABEL_ID);
+    timesliceLabelDisplay.innerHTML = selectedOption.innerText;
+    console.log(selectedOption)
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
     buildTypedUrlList(selectedValue);
