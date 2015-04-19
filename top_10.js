@@ -41,7 +41,8 @@ function buildTypedUrlList(timeslice) {
 
   chrome.history.search({
     'text': '',              // Return every history item...
-    'startTime': searchDepth  // accessed less than x time ago.
+    'startTime': searchDepth,  // accessed less than x time ago.
+    'maxResults': 0 // 0 == all results
     },
    function(historyItems) {
     // For each history item, get details on all visits.
