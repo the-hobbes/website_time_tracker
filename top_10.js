@@ -6,7 +6,7 @@ var PIE_CHART_CONTENT_ID = 'pie-chart-content';
 var TOP_SITES_BUTTON_ID = 'top-sites-button';
 var PIE_CHART_BUTTON_ID = 'pie-chart-button';
 
-var ACTIVE_BACKGROUND_COLOR = 'whitesmoke';
+var ACTIVE_BACKGROUND_COLOR = '#FCFCFC';
 var DORMANT_BACKGROUND_COLOR = 'white';
 var BORDER_COLOR = 'black';
 
@@ -125,8 +125,33 @@ var printTopResults = function(sortedUrlArray, urlCountObject) {
   createPieChart(pieChartData); 
 }
 
+var createDropShadowFilter = function() {
+  var svg = d3.select('svg');
+  var defs = svg.append("defs");
+
+  var filter = defs.append("filter")
+      .attr("id", "dropshadow")
+
+  filter.append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 4)
+      .attr("result", "blur");
+  filter.append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 2)
+      .attr("dy", 2)
+      .attr("result", "offsetBlur");
+
+  var feMerge = filter.append("feMerge");
+
+  feMerge.append("feMergeNode")
+      .attr("in", "offsetBlur")
+  feMerge.append("feMergeNode")
+      .attr("in", "SourceGraphic");
+}
+
 var createPieChart = function(pieChartData) {    
-  var data = pieChartData
+  var data = pieChartData;
 
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
@@ -138,12 +163,18 @@ var createPieChart = function(pieChartData) {
       e.value + ' visits.' })
     .showLabels(true);
 
+  createDropShadowFilter();
+
+  d3.selectAll("svg")
+  .attr("class", "shadow")
+  .attr("filter", "url(#dropshadow)");
+
   d3.select("#chart svg")
     .datum(data)
     .transition().duration(1200)
     .call(chart);
-
-    return chart;
+    
+  return chart;
   });
 }
 
