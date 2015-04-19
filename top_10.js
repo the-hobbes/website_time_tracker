@@ -1,24 +1,39 @@
-// global vars
-
+// document identifiers
 var TOP_SITES_CONTENT_ID = 'top-sites-content';
 var PIE_CHART_CONTENT_ID = 'pie-chart-content';
-
 var TOP_SITES_BUTTON_ID = 'top-sites-button';
 var PIE_CHART_BUTTON_ID = 'pie-chart-button';
+var TIMESLICE_SELECT_ID = 'timesliceSelectBox';
+var TOP_SITES_LIST_ID = 'top-sites-list';
 
+// default coloring
 var ACTIVE_BACKGROUND_COLOR = '#FCFCFC';
 var DORMANT_BACKGROUND_COLOR = 'white';
 var BORDER_COLOR = 'black';
 
-function buildTypedUrlList() {
-  var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-  var oneWeekAgo = (new Date).getTime() - microsecondsPerWeek;
+// time slice identifiers
+var WEEK = '1'
+var MONTH = '2'
+var YEAR = '3'
 
-  var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
-  var oneMonthAgo = (new Date).getTime() - microsecondsPerMonth; 
+function buildTypedUrlList(timeslice) {
+  // set default value
+  if (typeof timeslice === 'undefined') { timeslice = MONTH; }
+  var searchDepth = 0
 
-  var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
-  var oneYearAgo = (new Date).getTime() - microsecondsPerYear; 
+  // determine how far back to go
+  if (timeslice == MONTH) {
+    var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
+    searchDepth = (new Date).getTime() - microsecondsPerMonth; 
+  } else if (timeslice == WEEK) {
+    var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    searchDepth = (new Date).getTime() - microsecondsPerWeek;
+  } else {
+    var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
+    searchDepth = (new Date).getTime() - microsecondsPerYear; 
+  }
+
+  console.log(timeslice);
 
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
@@ -26,7 +41,7 @@ function buildTypedUrlList() {
 
   chrome.history.search({
     'text': '',              // Return every history item...
-    'startTime': microsecondsPerMonth  // accessed less than one month ago.
+    'startTime': searchDepth  // accessed less than x time ago.
     },
    function(historyItems) {
     // For each history item, get details on all visits.
@@ -178,7 +193,12 @@ var createPieChart = function(pieChartData) {
   });
 }
 
-var addButtonListeners = function(){
+var addListeners = function() {
+  addTabChangeListeners();
+  addTimesliceListeners();
+}
+
+var addTabChangeListeners = function(){
   var topSitesButton = document.getElementById(TOP_SITES_BUTTON_ID);
   var pieChartButton = document.getElementById(PIE_CHART_BUTTON_ID);
 
@@ -191,6 +211,28 @@ var addButtonListeners = function(){
     showHiddenContent(TOP_SITES_CONTENT_ID, PIE_CHART_CONTENT_ID, 
       pieChartButton, topSitesButton);
   })
+}
+
+var clearCurrentContents = function(targetNode) {
+  // clears the content of a node
+  var node = document.getElementById(targetNode);
+  if (node) {
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
+  }
+}
+
+var addTimesliceListeners = function() {
+  // listen to onchange events and rebuild the display using new data
+  var timesliceSelectBox = document.getElementById(TIMESLICE_SELECT_ID);
+  timesliceSelectBox.onchange = function (e) {
+    var selectedOption = this[this.selectedIndex];
+    var selectedValue = selectedOption.value;
+    targetNode = TOP_SITES_LIST_ID;
+    clearCurrentContents(targetNode);
+    buildTypedUrlList(selectedValue);
+  }
 }
 
 var showHiddenContent = function(currentContent, targetContent, callingButton, 
@@ -219,9 +261,9 @@ var hideContent = function(currentContent, currentButton) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Function to add event listener to buttons
-  addButtonListeners();
+  // add event listeners to elements
+ addListeners();
 
-  // entry point into history api stuff
+  // entry point
   buildTypedUrlList(); 
 });
