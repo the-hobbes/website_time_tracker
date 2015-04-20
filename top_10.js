@@ -73,14 +73,13 @@ function buildTypedUrlList(timeslice) {
   var processVisits = function(url, visitItems) {
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
       // hack to get simple domains from a given url
-      var linkElement = document.createElement('a');
-      linkElement.href = url;
+      var rootDomain = new URL(url).hostname
 
-      if (!urlCountObject[linkElement.hostname]) {
-        urlCountObject[linkElement.hostname] = 0;
+      if (!urlCountObject[rootDomain]) {
+        urlCountObject[rootDomain] = 0;
       }
 
-      urlCountObject[linkElement.hostname]++;
+      urlCountObject[rootDomain]++;
     }
 
     // If this is the final outstanding call to processVisits(),
