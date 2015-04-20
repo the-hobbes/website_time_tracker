@@ -17,18 +17,18 @@ var WEEK = '1'
 var MONTH = '2'
 var YEAR = '3'
 
-function buildTypedUrlList(timeslice) {
+function buildHistoryItemList(timeslice) {
   // set default value
-  if (typeof timeslice === 'undefined') { timeslice = MONTH; }
+  if (typeof timeslice === 'undefined') { timeslice = WEEK; }
   var searchDepth = 0
 
   // determine how far back to go
-  if (timeslice == MONTH) {
-    var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
-    searchDepth = (new Date).getTime() - microsecondsPerMonth; 
-  } else if (timeslice == WEEK) {
+  if (timeslice == WEEK) {
     var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     searchDepth = (new Date).getTime() - microsecondsPerWeek;
+  } else if (timeslice == MONTH) {
+    var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
+    searchDepth = (new Date).getTime() - microsecondsPerMonth; 
   } else {
     var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
     searchDepth = (new Date).getTime() - microsecondsPerYear; 
@@ -177,6 +177,7 @@ var createPieChart = function(pieChartData) {
     .labelType("percent")
     .tooltipContent(function(key, y, e, graph) { return key + ', ' + 
       e.value + ' visits.' })
+    .labelThreshold(.05)
     .showLabels(true);
 
   createDropShadowFilter();
@@ -235,7 +236,7 @@ var addTimesliceListeners = function() {
     console.log(selectedOption)
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
-    buildTypedUrlList(selectedValue);
+    buildHistoryItemList(selectedValue);
   }
 }
 
@@ -269,5 +270,5 @@ document.addEventListener('DOMContentLoaded', function () {
  addListeners();
 
   // entry point
-  buildTypedUrlList(); 
+  buildHistoryItemList(); 
 });
