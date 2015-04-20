@@ -13,9 +13,10 @@ var DORMANT_BACKGROUND_COLOR = 'white';
 var BORDER_COLOR = 'black';
 
 // time slice identifiers
-var WEEK = '1'
-var MONTH = '2'
-var YEAR = '3'
+var WEEK = '1';
+var MONTH = '2';
+var YEAR = '3';
+var TOP_X = 10; // top X items to show to the user
 
 function buildHistoryItemList(timeslice) {
   // set default value
@@ -33,8 +34,6 @@ function buildHistoryItemList(timeslice) {
     var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
     searchDepth = (new Date).getTime() - microsecondsPerYear; 
   }
-
-  console.log(timeslice);
 
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
@@ -72,8 +71,8 @@ function buildHistoryItemList(timeslice) {
   // times a user visited a URL.
   var processVisits = function(url, visitItems) {
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
-      // hack to get simple domains from a given url
-      var rootDomain = new URL(url).hostname
+      // get simple domains from a given url
+      var rootDomain = new URL(url).hostname;
 
       if (!urlCountObject[rootDomain]) {
         urlCountObject[rootDomain] = 0;
@@ -94,6 +93,7 @@ function buildHistoryItemList(timeslice) {
   var onAllVisitsProcessed = function() {
    sortedUrlArray = [];
    for (var url in urlCountObject) {
+     // add every url entry in the object to an array for sorting
      sortedUrlArray.push(url);
    }
 
@@ -109,7 +109,8 @@ function buildHistoryItemList(timeslice) {
 var printTopResults = function(sortedUrlArray, urlCountObject) {
   pieChartData = new Array(); // object to store pie chart data
 
-  for (var i in sortedUrlArray) {
+  // for (var i in sortedUrlArray) {
+  for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
     count = urlCountObject[sortedUrlArray[i]];
 
@@ -233,7 +234,6 @@ var addTimesliceListeners = function() {
     var selectedValue = selectedOption.value;
     var timesliceLabelDisplay = document.getElementById(TIME_LABEL_ID);
     timesliceLabelDisplay.innerHTML = selectedOption.innerText;
-    console.log(selectedOption)
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
     buildHistoryItemList(selectedValue);
