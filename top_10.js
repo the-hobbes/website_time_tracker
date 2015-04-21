@@ -138,7 +138,7 @@ var printTopResults = function(sortedUrlArray, urlCountObject) {
     var countText = document.createTextNode(', ' + count + ' times.');
     lineItemElement.appendChild(countText);
 
-    if (i <= 9) { // print the top 10 urls w/counts:
+    if (i <= TOP_X - 1) { // print the top 10 urls w/counts:
       // append each line item to the appropriate ol element
       var orderedListElement = document.getElementById('top-sites-list');
       orderedListElement.appendChild(lineItemElement);
