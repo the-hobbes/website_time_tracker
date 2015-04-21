@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Top Visited Websites",
-  "description": "This extension shows your top 10 most visited websites for the past week.",
+  "description": "This extension shows your top 10 most visited websites for the past week, month, or year.",
   "version": "1.0",
 
   "browser_action": {

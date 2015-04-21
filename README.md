@@ -1,4 +1,4 @@
-# website_time_tracker
+# Website Time Tracker
 <i>A chrome extension to track where you spend your time on the web.</i>
 
 <h2>Overview</h2>
