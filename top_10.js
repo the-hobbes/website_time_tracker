@@ -78,7 +78,7 @@ function buildHistoryItemList(timeslice) {
     /**
       * processVisits()
       * Callback for chrome.history.getVisits().  Counts the number of times a
-      * user visited a URL.
+      *     user visited a URL.
       * @param {string} url The url to count.
       * @param {object} visitItems The object from the API representing a visit.
       */
@@ -104,7 +104,11 @@ function buildHistoryItemList(timeslice) {
   
   // This function is called when we have the final list of URls to display.
   var onAllVisitsProcessed = function() {
-   // Sort the URLs by the number of times the user typed them.
+    /**
+      * onAllVisitsProcessed()
+      * Sort the URLs by the number of times the user typed them, then call
+      *     the function to print them. 
+      */
    sortedUrlArray.sort(function(a, b) {
      return urlCountObject[b] - urlCountObject[a];
    });
