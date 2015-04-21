@@ -71,16 +71,24 @@ function buildHistoryItemList(timeslice) {
 
   // Maps URLs to a count of the number of times the user visited that URL
   var urlCountObject = {};
-  
-  // Callback for chrome.history.getVisits().  Counts the number of
-  // times a user visited a URL.
+  // to be sorted by url count
+  var sortedUrlArray = [];
+
   var processVisits = function(url, visitItems) {
+    /**
+      * processVisits()
+      * Callback for chrome.history.getVisits().  Counts the number of times a
+      * user visited a URL.
+      * @param {string} url The url to count.
+      * @param {object} visitItems The object from the API representing a visit.
+      */
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
 
       if (!urlCountObject[rootDomain]) {
         urlCountObject[rootDomain] = 0;
+        sortedUrlArray.push(rootDomain);
       }
 
       urlCountObject[rootDomain]++;
@@ -96,12 +104,6 @@ function buildHistoryItemList(timeslice) {
   
   // This function is called when we have the final list of URls to display.
   var onAllVisitsProcessed = function() {
-   sortedUrlArray = [];
-   for (var url in urlCountObject) {
-     // add every url entry in the object to an array for sorting
-     sortedUrlArray.push(url);
-   }
-
    // Sort the URLs by the number of times the user typed them.
    sortedUrlArray.sort(function(a, b) {
      return urlCountObject[b] - urlCountObject[a];
