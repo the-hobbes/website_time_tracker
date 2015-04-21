@@ -138,11 +138,9 @@ var printTopResults = function(sortedUrlArray, urlCountObject) {
     var countText = document.createTextNode(', ' + count + ' times.');
     lineItemElement.appendChild(countText);
 
-    if (i <= TOP_X - 1) { // print the top 10 urls w/counts:
-      // append each line item to the appropriate ol element
-      var orderedListElement = document.getElementById('top-sites-list');
-      orderedListElement.appendChild(lineItemElement);
-    }
+    // append each line item to the appropriate ol element
+    var orderedListElement = document.getElementById('top-sites-list');
+    orderedListElement.appendChild(lineItemElement);
 
     // this is massaged data for the pie chart
     var tmp = new Object();
