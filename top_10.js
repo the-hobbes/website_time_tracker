@@ -271,12 +271,16 @@ var showLoadingIcon = function() {
   // hide the content
   // show the loading icon
   console.log('show loading icon');
+  var loadingIcon = document.getElementById(LOADING_ICON_ID);
+  loadingIcon.style.display = 'block';
 }
 
 var hideLoadingIcon = function() {
   // hide the loading icon
   // show the content
   console.log('hide loading icon');
+  var loadingIcon = document.getElementById(LOADING_ICON_ID);
+  loadingIcon.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function () {

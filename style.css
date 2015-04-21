@@ -25,6 +25,13 @@ h2 {
   font-weight: 300;
   margin-left: 10px;
 }
+#loading-icon {
+  width:600px;
+  height:500px;
+  position:fixed;
+  z-index:9999;
+  background:url('spinner.gif') no-repeat center center rgba(0,0,0,0.25)
+}
 
 /* top-sites tab */
 #top-sites-content ol {
