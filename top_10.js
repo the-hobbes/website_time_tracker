@@ -57,8 +57,12 @@ function buildHistoryItemList(timeslice) {
     for (var i = 0; i < historyItems.length; ++i) {
       var url = historyItems[i].url;
       var processVisitsWithUrl = function(url) {
-        // We need the url of the visited item to process the visit.
-        // Use a closure to bind the  url into the callback's args.
+        /**
+          * processVisitsWithUrl()
+          * We need the url of the visited item to process the visit. Use a
+          *     closure to bind the url into the callback's args.
+          * @return {function} A closure to bind url+callback
+          */
         return function(visitItems) { processVisits(url, visitItems); };
       };
       chrome.history.getVisits({url: url}, processVisitsWithUrl(url));
