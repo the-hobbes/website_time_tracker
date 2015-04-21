@@ -6,6 +6,7 @@ var PIE_CHART_BUTTON_ID = 'pie-chart-button';
 var TIMESLICE_SELECT_ID = 'timesliceSelectBox';
 var TOP_SITES_LIST_ID = 'top-sites-list';
 var TIME_LABEL_ID = 'time-label-span';
+var LOADING_ICON_ID = 'loading-icon';
 
 // default coloring
 var ACTIVE_BACKGROUND_COLOR = '#FCFCFC';
@@ -19,6 +20,7 @@ var YEAR = '3';
 var TOP_X = 10; // top X items to show to the user
 
 function buildHistoryItemList(timeslice) {
+  showLoadingIcon();
   // set default value
   if (typeof timeslice === 'undefined') { timeslice = WEEK; }
   var searchDepth = 0
@@ -139,7 +141,8 @@ var printTopResults = function(sortedUrlArray, urlCountObject) {
     tmp.value = count;
     pieChartData.push(tmp);
   }
-  createPieChart(pieChartData); 
+  createPieChart(pieChartData);
+  hideLoadingIcon();
 }
 
 var createDropShadowFilter = function() {
@@ -264,10 +267,21 @@ var hideContent = function(currentContent, currentButton) {
   currentButton.style.backgroundColor = DORMANT_BACKGROUND_COLOR;
 }
 
+var showLoadingIcon = function() {
+  // hide the content
+  // show the loading icon
+  console.log('show loading icon');
+}
+
+var hideLoadingIcon = function() {
+  // hide the loading icon
+  // show the content
+  console.log('hide loading icon');
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   // add event listeners to elements
- addListeners();
+  addListeners();
 
   // entry point
   buildHistoryItemList(); 
