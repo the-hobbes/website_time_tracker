@@ -20,12 +20,18 @@ var YEAR = '3';
 var TOP_X = 10; // top X items to show to the user
 
 function buildHistoryItemList(timeslice) {
+  /**
+   * buildHistoryItemList()
+   * This function builds a list of history items from the Chrome history api.
+   * @param {string} timeslice A string indicating which of 3 timeslice 
+   *     durations to use. Note that the if the timeslice is undefined, a 
+   *     default of '1' is used, indicating the duration of a week. 
+   */
   showLoadingIcon();
-  // set default value
+  
   if (typeof timeslice === 'undefined') { timeslice = WEEK; }
   var searchDepth = 0
 
-  // determine how far back to go
   if (timeslice == WEEK) {
     var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
     searchDepth = (new Date).getTime() - microsecondsPerWeek;
@@ -42,21 +48,18 @@ function buildHistoryItemList(timeslice) {
   var numRequestsOutstanding = 0;
 
   chrome.history.search({
-    'text': '',              // Return every history item...
+    'text': '',                // Return every history item...
     'startTime': searchDepth,  // accessed less than x time ago.
-    'maxResults': 0 // 0 == all results
+    'maxResults': 0            // 0 == all results
     },
    function(historyItems) {
     // For each history item, get details on all visits.
-
     for (var i = 0; i < historyItems.length; ++i) {
       var url = historyItems[i].url;
       var processVisitsWithUrl = function(url) {
         // We need the url of the visited item to process the visit.
         // Use a closure to bind the  url into the callback's args.
-        return function(visitItems) {
-          processVisits(url, visitItems); // call function defined below
-        };
+        return function(visitItems) { processVisits(url, visitItems); };
       };
       chrome.history.getVisits({url: url}, processVisitsWithUrl(url));
       numRequestsOutstanding++;
@@ -109,6 +112,12 @@ function buildHistoryItemList(timeslice) {
 }
 
 var printTopResults = function(sortedUrlArray, urlCountObject) {
+  /**
+   * printTopResults()
+   * Displays urls and counts. Also calls pie chart code.
+   * @param {array} sortedUrlArray An array of count-sorted Urls. 
+   * @param {object} urlCountObject An object containing url to count mappings.
+   */
   pieChartData = new Array(); // object to store pie chart data
 
   // for (var i in sortedUrlArray) {
@@ -146,6 +155,10 @@ var printTopResults = function(sortedUrlArray, urlCountObject) {
 }
 
 var createDropShadowFilter = function() {
+ /**
+   * createDropShadowFilter()
+   * Creates an SVG drop shadow filter for the pie chart.
+   */
   var svg = d3.select('svg');
   var defs = svg.append("defs");
 
@@ -170,7 +183,13 @@ var createDropShadowFilter = function() {
       .attr("in", "SourceGraphic");
 }
 
-var createPieChart = function(pieChartData) {    
+var createPieChart = function(pieChartData) {  
+  /**
+   * createPieChart()
+   * Creates a pie chart with url data, using nvd3 libraries.
+   * @param {object} pieChartData An object containing url-to-count mappings
+   *     formatted for the nvd3 pie chart library.
+   */
   var data = pieChartData;
 
   nv.addGraph(function() {
@@ -200,11 +219,19 @@ var createPieChart = function(pieChartData) {
 }
 
 var addListeners = function() {
+  /**
+   * addListeners()
+   * Add listeners for page events. 
+   */
   addTabChangeListeners();
   addTimesliceListeners();
 }
 
 var addTabChangeListeners = function(){
+  /**
+   * addTabChangeListeners()
+   * Add listeners to the tab buttons, enabling a user to switch between them.
+   */
   var topSitesButton = document.getElementById(TOP_SITES_BUTTON_ID);
   var pieChartButton = document.getElementById(PIE_CHART_BUTTON_ID);
 
@@ -220,7 +247,12 @@ var addTabChangeListeners = function(){
 }
 
 var clearCurrentContents = function(targetNode) {
-  // clears the content of a node
+  /**
+   * clearCurrentContents()
+   * Clears the current contents of a provided node.
+   * @param {element} targetNode A DOM node from which its children will be 
+   *     cleared.
+   */
   var node = document.getElementById(targetNode);
   if (node) {
     while (node.firstChild) {
@@ -230,7 +262,11 @@ var clearCurrentContents = function(targetNode) {
 }
 
 var addTimesliceListeners = function() {
-  // listen to onchange events and rebuild the display using new data
+  /**
+   * addTimesliceListeners()
+   * Listens to onchange events from the selectbox containing timeslices, and
+   *     rebuilds the display according to what was selected.
+   */
   var timesliceSelectBox = document.getElementById(TIMESLICE_SELECT_ID);
   timesliceSelectBox.onchange = function (e) {
     var selectedOption = this[this.selectedIndex];
@@ -245,9 +281,18 @@ var addTimesliceListeners = function() {
 
 var showHiddenContent = function(currentContent, targetContent, callingButton, 
   currentButton) {
-  // currentContent is the content that is displayed right now
-  // targetContent is the element that we want to show
-  // callingButton is the button that was clicked to fire the event
+  /**
+   * showHiddenContent()
+   * Hides currently displayed content and shows another set of content.
+   * @param {string} currentContent A string containing the ID of the content 
+   *     currently displayed.
+   * @param {string} targetContent A string containing the ID of the content 
+   *     that should be displayed.
+   * @param {element} callingButton A DOM element containing the object that was
+   *     clicked and caused the event to fire.
+   * @param {element} currentButton A DOM element containing the object that 
+   *     represents the currently active button.
+   */
   var displayStyle = 'block';
 
   hideContent(currentContent, currentButton);
@@ -259,34 +304,47 @@ var showHiddenContent = function(currentContent, targetContent, callingButton,
 }
 
 var hideContent = function(currentContent, currentButton) {
-  // set styling to default
-  var toHide = document.getElementById(currentContent);
-  
+  /**
+   * hideContent()
+   * Hides a given content node, and updates its active button style.
+   * @param {string} currentContent A string representign the ID of the current
+   *     content displayed.
+   * @param {element} currentButton A DOM element representing the currently
+   *     active button.
+   */
+  var toHide = document.getElementById(currentContent);  
   toHide.style.display = 'none';
   currentButton.style.borderBottomColor = BORDER_COLOR;
   currentButton.style.backgroundColor = DORMANT_BACKGROUND_COLOR;
 }
 
 var showLoadingIcon = function() {
-  // hide the content
-  // show the loading icon
-  console.log('show loading icon');
+  /**
+   * showLoadingIcon()
+   * Shows a loading icon while the API is being queried and content is being
+   *     loaded.
+   */
   var loadingIcon = document.getElementById(LOADING_ICON_ID);
   loadingIcon.style.display = 'block';
 }
 
 var hideLoadingIcon = function() {
-  // hide the loading icon
-  // show the content
-  console.log('hide loading icon');
+  /**
+   * hideLoadingIcon()
+   * Hides the currently displayed loading icon after the API has returned and
+   *     the results are ready to display.
+   */
   var loadingIcon = document.getElementById(LOADING_ICON_ID);
   loadingIcon.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  /**
+   * document.addEventListener()
+   * Entry point into the code. Fires when the DOMContentLoaded event completes.
+   */
   // add event listeners to elements
   addListeners();
-
-  // entry point
+  // begin querying the history API and setting up the page
   buildHistoryItemList(); 
 });
