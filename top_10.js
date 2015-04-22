@@ -360,3 +360,4 @@ document.addEventListener('DOMContentLoaded', function () {
   // begin querying the history API and setting up the page
   buildHistoryItemList(); 
 });
+
