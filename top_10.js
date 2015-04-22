@@ -43,8 +43,9 @@ function buildHistoryItemList(timeslice) {
     searchDepth = (new Date).getTime() - microsecondsPerYear; 
   }
 
-  // Track the number of callbacks from chrome.history.getVisits()
-  // that we expect to get.  When it reaches zero, we have all results.
+   /* Track the number of callbacks from chrome.history.getVisits()
+    *     that we expect to get.  When it reaches zero, we have all results.
+    */
   var numRequestsOutstanding = 0;
 
   chrome.history.search({
@@ -98,20 +99,21 @@ function buildHistoryItemList(timeslice) {
       urlCountObject[rootDomain]++;
     }
 
-    // If this is the final outstanding call to processVisits(),
-    // then we have the final results.  Use them to build the list
-    // of URLs to show in the popup.
-    if (!--numRequestsOutstanding) {
+     /* If this is the final outstanding call to processVisits(),
+      *     then we have the final results.  Use them to build the list
+      *     of URLs to show in the popup.
+      */
+    if (!--numRequestsOutstanding) { // if you can no longer decrement...
       onAllVisitsProcessed();
     }
   };
   
-  // This function is called when we have the final list of URls to display.
   var onAllVisitsProcessed = function() {
     /**
       * onAllVisitsProcessed()
       * Sort the URLs by the number of times the user typed them, then call
-      *     the function to print them. 
+      *     the function to print them. This is called when we have the final 
+      *     list of URls to display.
       */
    sortedUrlArray.sort(function(a, b) {
      return urlCountObject[b] - urlCountObject[a];
@@ -245,12 +247,12 @@ var addTabChangeListeners = function(){
 
   topSitesButton.addEventListener('click', function(){
     showHiddenContent(PIE_CHART_CONTENT_ID, TOP_SITES_CONTENT_ID, 
-      topSitesButton, pieChartButton);
+                      topSitesButton, pieChartButton);
   });
 
   pieChartButton.addEventListener('click', function() {
     showHiddenContent(TOP_SITES_CONTENT_ID, PIE_CHART_CONTENT_ID, 
-      pieChartButton, topSitesButton);
+                      pieChartButton, topSitesButton);
   })
 }
 
@@ -287,8 +289,10 @@ var addTimesliceListeners = function() {
   }
 }
 
-var showHiddenContent = function(currentContent, targetContent, callingButton, 
-  currentButton) {
+var showHiddenContent = function(currentContent, 
+                                 targetContent, 
+                                 callingButton, 
+                                 currentButton) {
   /**
    * showHiddenContent()
    * Hides currently displayed content and shows another set of content.
