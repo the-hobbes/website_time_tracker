@@ -206,12 +206,15 @@ var createPieChart = function(pieChartData) {
   var chart = nv.models.pieChart()
     .x(function(d) { return d.label })
     .y(function(d) { return d.value })
-    .showLegend(false)
+    .showLegend(true)
+    .pieLabelsOutside(false)
     .labelType("percent")
     .tooltipContent(function(key, y, e, graph) { return key + ', ' + 
       e.value + ' visits.' })
     .labelThreshold(.05)
     .showLabels(true);
+
+  chart.legend.margin({top: 5, right:50, left:0, bottom: 0});
 
   createDropShadowFilter();
 
@@ -224,6 +227,7 @@ var createPieChart = function(pieChartData) {
     .transition().duration(1200)
     .call(chart);
     
+  document.getElementsByClassName("shadow").removeAttribute("filter");
   return chart;
   });
 }
