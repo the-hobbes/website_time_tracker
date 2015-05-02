@@ -216,19 +216,11 @@ var createPieChart = function(pieChartData) {
 
   chart.legend.margin({top: 5, right:50, left:0, bottom: 0});
 
-  // LEAVE OUT DROPSHADOW FOR NOW
-  // createDropShadowFilter();
-
-  // d3.selectAll("svg")
-  // .attr("class", "shadow")
-  // .attr("filter", "url(#dropshadow)");
-
   d3.select("#chart svg")
     .datum(data)
     .transition().duration(1200)
     .call(chart);
     
-  document.getElementsByClassName("shadow").removeAttribute("filter");
   return chart;
   });
 }
