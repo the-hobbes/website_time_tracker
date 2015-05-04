@@ -30,7 +30,7 @@ h2 {
   height:500px;
   position:fixed;
   z-index:9999;
-  background:url('spinner.gif') no-repeat center center rgba(0,0,0,0.25)
+  background:url('img/spinner.gif') no-repeat center center rgba(0,0,0,0.25)
 }
 /* top-sites tab */
 #top-sites-content ol {
