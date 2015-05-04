@@ -1,11 +1,13 @@
 // document identifiers
 var TOP_SITES_CONTENT_ID = 'top-sites-content';
 var PIE_CHART_CONTENT_ID = 'pie-chart-content';
+var TIMESERIES_CONTENT_ID = 'timeseries-content';
 var TOP_SITES_BUTTON_ID = 'top-sites-button';
 var PIE_CHART_BUTTON_ID = 'pie-chart-button';
+var TIMESERIES_BUTTON_ID = 'timeseries-button';
 var TIMESLICE_SELECT_ID = 'timesliceSelectBox';
 var TOP_SITES_LIST_ID = 'top-sites-list';
-var TIME_LABEL_ID = 'time-label-span';
+var TIME_LABEL_CLASS = 'time-label-span';
 var LOADING_ICON_ID = 'loading-icon';
 
 // default coloring
@@ -18,6 +20,11 @@ var WEEK = '1';
 var MONTH = '2';
 var YEAR = '3';
 var TOP_X = 10; // top X items to show to the user
+
+// active tab management, top-sites by default
+var ACTIVE_TAB = TOP_SITES_CONTENT_ID;
+var ACTIVE_BUTTON = TOP_SITES_BUTTON_ID;
+
 
 function buildHistoryItemList(timeslice) {
   /**
@@ -136,10 +143,11 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    * @param {array} sortedUrlArray An array of count-sorted Urls. 
    * @param {object} visitObject An object containing url to count mappings.
    */
-  pieChartData = new Array(); // object to store pie chart data
+  pieChartData = new Array();   // object to store pie chart data
+  timeseriesData = new Array(); // object to store the timeseries data
 
   console.log(visitObject)
-  // for (var i in sortedUrlArray) {
+
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
     count = visitObject[sortedUrlArray[i]].count;
@@ -168,6 +176,7 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     pieChartData.push(tmp);
   }
   createPieChart(pieChartData);
+  // createTimeseries(timeseriesData); TODO: Implement this
   hideLoadingIcon();
 }
 
@@ -232,6 +241,70 @@ var createPieChart = function(pieChartData) {
   });
 }
 
+function sinAndCos() {
+  var sin = [],sin2 = [],
+      cos = [];
+
+  //Data is represented as an array of {x,y} pairs.
+  for (var i = 0; i < 100; i++) {
+    sin.push({x: i, y: Math.sin(i/10)});
+    sin2.push({x: i, y: Math.sin(i/10) *0.25 + 0.5});
+    cos.push({x: i, y: .5 * Math.cos(i/10)});
+  }
+
+  //Line chart data should be sent as an array of series objects.
+  return [
+    {
+      values: sin,      //values - represents the array of {x,y} data points
+      key: 'Sine Wave', //key  - the name of the series.
+      color: '#ff7f0e'  //color - optional: choose your own line color.
+    },
+    {
+      values: cos,
+      key: 'Cosine Wave',
+      color: '#2ca02c'
+    },
+    {
+      values: sin2,
+      key: 'Another sine wave',
+      color: '#7777ff',
+      area: true      //area - set to true if you want this line to turn into a filled area chart.
+    }
+  ];
+}
+
+var createTimeseries = function(timeseriesData) {
+  // TODO: Implement me.
+  console.log(timeseriesData);
+
+  var chart = nv.models.lineChart()
+                  .margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
+                  .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
+                  .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
+                  .showYAxis(true)        //Show the y-axis
+                  .showXAxis(true)        //Show the x-axis
+    ;
+
+  chart.xAxis     //Chart x-axis settings
+      .axisLabel('Visits')
+      .tickFormat(d3.format(',r'));
+
+  chart.yAxis     //Chart y-axis settings
+      .axisLabel('Date')
+      .tickFormat(d3.format('.02f'));
+
+  /* Done setting the chart up? Time to render it!*/
+  var myData = sinAndCos();   //You need data...
+
+  d3.select('#timeseries svg')    //Select the <svg> element you want to render the chart in.   
+      .datum(myData)              //Populate the <svg> element with chart data...
+      .call(chart);               //Finally, render the chart!
+
+  //Update the chart when window resizes.
+  nv.utils.windowResize(function() { chart.update() });
+  return chart;
+}
+
 var addListeners = function() {
   /**
    * addListeners()
@@ -248,15 +321,21 @@ var addTabChangeListeners = function(){
    */
   var topSitesButton = document.getElementById(TOP_SITES_BUTTON_ID);
   var pieChartButton = document.getElementById(PIE_CHART_BUTTON_ID);
+  var timeseriesButton = document.getElementById(TIMESERIES_BUTTON_ID);
 
   topSitesButton.addEventListener('click', function(){
-    showHiddenContent(PIE_CHART_CONTENT_ID, TOP_SITES_CONTENT_ID, 
-                      topSitesButton, pieChartButton);
+    showHiddenContent(ACTIVE_TAB, TOP_SITES_CONTENT_ID, 
+                      topSitesButton, ACTIVE_BUTTON);
   });
 
   pieChartButton.addEventListener('click', function() {
-    showHiddenContent(TOP_SITES_CONTENT_ID, PIE_CHART_CONTENT_ID, 
-                      pieChartButton, topSitesButton);
+    showHiddenContent(ACTIVE_TAB, PIE_CHART_CONTENT_ID, 
+                      pieChartButton, ACTIVE_BUTTON);
+  })
+
+  timeseriesButton.addEventListener('click', function() {
+    showHiddenContent(ACTIVE_TAB, TIMESERIES_CONTENT_ID, 
+                      timeseriesButton, ACTIVE_BUTTON);
   })
 }
 
@@ -285,7 +364,7 @@ var addTimesliceListeners = function() {
   timesliceSelectBox.onchange = function (e) {
     var selectedOption = this[this.selectedIndex];
     var selectedValue = selectedOption.value;
-    var timesliceLabelDisplay = document.getElementById(TIME_LABEL_ID);
+    var timesliceLabelDisplay = document.getElementsByClassName(TIME_LABEL_CLASS)[0];
     timesliceLabelDisplay.innerHTML = selectedOption.innerText;
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
@@ -296,7 +375,7 @@ var addTimesliceListeners = function() {
 var showHiddenContent = function(currentContent, 
                                  targetContent, 
                                  callingButton, 
-                                 currentButton) {
+                                 currentButtonId) {
   /**
    * showHiddenContent()
    * Hides currently displayed content and shows another set of content.
@@ -306,10 +385,11 @@ var showHiddenContent = function(currentContent,
    *     that should be displayed.
    * @param {element} callingButton A DOM element containing the object that was
    *     clicked and caused the event to fire.
-   * @param {element} currentButton A DOM element containing the object that 
-   *     represents the currently active button.
+   * @param {string} currentButtonId A string containing the id of the currently
+   *     active button.
    */
   var displayStyle = 'block';
+  currentButton = document.getElementById(ACTIVE_BUTTON);
 
   hideContent(currentContent, currentButton);
 
@@ -317,13 +397,18 @@ var showHiddenContent = function(currentContent,
   toShow.style.display = displayStyle;
   callingButton.style.borderBottomColor = ACTIVE_BACKGROUND_COLOR;
   callingButton.style.backgroundColor = ACTIVE_BACKGROUND_COLOR;
+
+  // set up globals to track the state of the page
+  ACTIVE_TAB = targetContent;
+  // the id of the button that was clicked on is the new active button
+  ACTIVE_BUTTON = event.target.id;
 }
 
 var hideContent = function(currentContent, currentButton) {
   /**
    * hideContent()
    * Hides a given content node, and updates its active button style.
-   * @param {string} currentContent A string representign the ID of the current
+   * @param {string} currentContent A string representing the ID of the current
    *     content displayed.
    * @param {element} currentButton A DOM element representing the currently
    *     active button.

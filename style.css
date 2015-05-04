@@ -38,7 +38,7 @@ h2 {
   line-height: 2rem;
 }
 #top-sites-button {
-  width: 45%;
+  width: 30%;
   float: left;
   overflow: hidden; /* if you don't want #second to wrap below #first */
   border-bottom-color: #FCFCFC;
@@ -54,7 +54,7 @@ li {
 }
 /*pie-chart tab*/
 #pie-chart-button {
-  width: 45%;
+  width: 30%;
   float: right;
 }
 #pie-chart-content {
@@ -93,4 +93,11 @@ g.nv-slice {
 g.nv-slice:hover {
   fill: black;
   stroke: black;
+}
+
+/*timeseries tab*/
+#timeseries-button {
+  width: 30%;
+  float: left;
+  margin-left: 13px;
 }
