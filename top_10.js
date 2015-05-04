@@ -57,16 +57,18 @@ function buildHistoryItemList(timeslice) {
     // For each history item, get details on all visits.
     for (var i = 0; i < historyItems.length; ++i) {
       var url = historyItems[i].url;
-      var processVisitsWithUrl = function(url) {
+      var processVisitsWithUrl = function(url, historyItem) {
         /**
           * processVisitsWithUrl()
           * We need the url of the visited item to process the visit. Use a
           *     closure to bind the url into the callback's args.
-          * @return {function} A closure to bind url+callback
+          * @param {string} the url of the historyItem.
+          * @param {object} the historyItem object corresponding to the url.
+          * @return {function} A closure to bind url+callback.
           */
-        return function(visitItems) { processVisits(url, visitItems); };
+        return function(visitItems) { processVisits(url, visitItems, historyItem); };
       };
-      chrome.history.getVisits({url: url}, processVisitsWithUrl(url));
+      chrome.history.getVisits({url: url}, processVisitsWithUrl(url, historyItems[i]));
       numRequestsOutstanding++;
     }
     if (!numRequestsOutstanding) {
@@ -75,28 +77,32 @@ function buildHistoryItemList(timeslice) {
   });  
 
   // Maps URLs to a count of the number of times the user visited that URL
-  var urlCountObject = {};
+  var visitObject = {};
   // to be sorted by url count
   var sortedUrlArray = [];
 
-  var processVisits = function(url, visitItems) {
+  var processVisits = function(url, visitItems, historyItem) {
     /**
       * processVisits()
       * Callback for chrome.history.getVisits().  Counts the number of times a
       *     user visited a URL.
       * @param {string} url The url to count.
+      * @param {object} the historyItem object corresponding to the url.
       * @param {object} visitItems The object from the API representing a visit.
       */
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
 
-      if (!urlCountObject[rootDomain]) {
-        urlCountObject[rootDomain] = 0;
+      if (!visitObject[rootDomain]) {
+        visitObject[rootDomain] = {
+          'count' : 0,
+          'times' : [historyItem.lastVisitTime]
+        };
         sortedUrlArray.push(rootDomain);
       }
-
-      urlCountObject[rootDomain]++;
+      visitObject[rootDomain].count++;
+      visitObject[rootDomain].times.push(historyItem.lastVisitTime);
     }
 
      /* If this is the final outstanding call to processVisits(),
@@ -116,26 +122,27 @@ function buildHistoryItemList(timeslice) {
       *     list of URls to display.
       */
    sortedUrlArray.sort(function(a, b) {
-     return urlCountObject[b] - urlCountObject[a];
+     return visitObject[b].count - visitObject[a].count;
    });
 
-   printTopResults(sortedUrlArray, urlCountObject);  
+   printTopResults(sortedUrlArray, visitObject);  
   };
 }
 
-var printTopResults = function(sortedUrlArray, urlCountObject) {
+var printTopResults = function(sortedUrlArray, visitObject) {
   /**
    * printTopResults()
    * Displays urls and counts. Also calls pie chart code.
    * @param {array} sortedUrlArray An array of count-sorted Urls. 
-   * @param {object} urlCountObject An object containing url to count mappings.
+   * @param {object} visitObject An object containing url to count mappings.
    */
   pieChartData = new Array(); // object to store pie chart data
 
+  console.log(visitObject)
   // for (var i in sortedUrlArray) {
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
-    count = urlCountObject[sortedUrlArray[i]];
+    count = visitObject[sortedUrlArray[i]].count;
 
     // grab the hostname from the url with this hack
     var linkElement = document.createElement('a');
@@ -216,19 +223,11 @@ var createPieChart = function(pieChartData) {
 
   chart.legend.margin({top: 5, right:50, left:0, bottom: 0});
 
-  // LEAVE OUT DROPSHADOW FOR NOW
-  // createDropShadowFilter();
-
-  // d3.selectAll("svg")
-  // .attr("class", "shadow")
-  // .attr("filter", "url(#dropshadow)");
-
   d3.select("#chart svg")
     .datum(data)
     .transition().duration(1200)
     .call(chart);
     
-  document.getElementsByClassName("shadow").removeAttribute("filter");
   return chart;
   });
 }
