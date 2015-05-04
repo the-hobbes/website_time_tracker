@@ -21,7 +21,7 @@ var MONTH = '2';
 var YEAR = '3';
 var TOP_X = 10; // top X items to show to the user
 
-// active tab management, top-sites by default
+// Maintain the state of the page. By default, the view is set to top-sites.
 var ACTIVE_TAB = TOP_SITES_CONTENT_ID;
 var ACTIVE_BUTTON = TOP_SITES_BUTTON_ID;
 
@@ -176,7 +176,7 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     pieChartData.push(tmp);
   }
   createPieChart(pieChartData);
-  // createTimeseries(timeseriesData); TODO: Implement this
+  createTimeseries(timeseriesData); // TODO: Implement this properly
   hideLoadingIcon();
 }
 
@@ -296,7 +296,7 @@ var createTimeseries = function(timeseriesData) {
   /* Done setting the chart up? Time to render it!*/
   var myData = sinAndCos();   //You need data...
 
-  d3.select('#timeseries svg')    //Select the <svg> element you want to render the chart in.   
+  d3.select('#timeseries-chart svg')    //Select the <svg> element you want to render the chart in.   
       .datum(myData)              //Populate the <svg> element with chart data...
       .call(chart);               //Finally, render the chart!
 

@@ -32,6 +32,10 @@ h2 {
   z-index:9999;
   background:url('img/spinner.gif') no-repeat center center rgba(0,0,0,0.25)
 }
+svg {
+  width: 600px; 
+  height: 400px;
+}
 /* top-sites tab */
 #top-sites-content ol {
   margin: 0px auto;
@@ -61,11 +65,7 @@ li {
   width: auto;
   margin:0px auto;
 }
-/*pie chart specific*/
-#chart svg {
-  width: 600px; 
-  height: 400px;
-}
+/*chart specific*/
 .nvtooltip {
     font-size: 12px;
     margin: 10px;
