@@ -103,8 +103,8 @@ function buildHistoryItemList(timeslice) {
 
       if (!visitObject[rootDomain]) {
         visitObject[rootDomain] = {
-          'count' : 0,
-          'times' : [historyItem.lastVisitTime]
+          'count' : 0, // this is the total count of all visits across all times
+          'times' : [historyItem.lastVisitTime] // TODO: this needs to have time: count, not just time.
         };
         sortedUrlArray.push(rootDomain);
       }
@@ -145,14 +145,14 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    */
   pieChartData = new Array();   // object to store pie chart data
   timeseriesData = new Array(); // object to store the timeseries data
-
+  console.log("visit object:")
   console.log(visitObject)
 
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
     count = visitObject[sortedUrlArray[i]].count;
 
-    // grab the hostname from the url with this hack
+    // make link elements
     var linkElement = document.createElement('a');
     linkElement.href = 'http://' + url;
     linkElement.text = url;
@@ -174,6 +174,23 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     tmp.label = url;
     tmp.value = count;
     pieChartData.push(tmp);
+
+    // make timeseries objects and add them to the collection 
+    // TODO: Break into new function
+    var timeseriesObject = new Object();
+    timeseriesObject.color = "#ff7f0e"; // TODO: random color needed
+    timeseriesObject.key = url;
+
+    var pointArray = [];
+    for (var j = 0; j < visitObject[sortedUrlArray[i]].times.length; j++) {
+      var pointObject = new Object();
+      pointObject.series = i;
+      pointObject.x =  // date
+      pointObject.y =  // count-> do we have to sum all the same dates together? the graph api won't handle that?
+      pointArray.push(pointObject);
+    }
+    timeseriesObject.values = visitObject[sortedUrlArray[i]].times;
+    timeseriesData.push(timeseriesObject);
   }
   createPieChart(pieChartData);
   createTimeseries(timeseriesData); // TODO: Implement this properly
@@ -217,7 +234,8 @@ var createPieChart = function(pieChartData) {
    *     formatted for the nvd3 pie chart library.
    */
   var data = pieChartData;
-
+  console.log("Pie Chart Data:");
+  console.log(data);
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
     .x(function(d) { return d.label })
@@ -275,6 +293,7 @@ function sinAndCos() {
 
 var createTimeseries = function(timeseriesData) {
   // TODO: Implement me.
+  console.log("timeseries data:")
   console.log(timeseriesData);
 
   var chart = nv.models.lineChart()
@@ -286,15 +305,17 @@ var createTimeseries = function(timeseriesData) {
     ;
 
   chart.xAxis     //Chart x-axis settings
-      .axisLabel('Visits')
+      .axisLabel('Date')
       .tickFormat(d3.format(',r'));
 
   chart.yAxis     //Chart y-axis settings
-      .axisLabel('Date')
+      .axisLabel('Visits')
       .tickFormat(d3.format('.02f'));
 
   /* Done setting the chart up? Time to render it!*/
   var myData = sinAndCos();   //You need data...
+  console.log("fake data:")
+  console.log(myData)
 
   d3.select('#timeseries-chart svg')    //Select the <svg> element you want to render the chart in.   
       .datum(myData)              //Populate the <svg> element with chart data...
