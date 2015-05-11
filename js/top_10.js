@@ -73,9 +73,11 @@ function buildHistoryItemList(timeslice) {
           * @param {object} the historyItem object corresponding to the url.
           * @return {function} A closure to bind url+callback.
           */
-        return function(visitItems) { processVisits(url, visitItems, historyItem); };
+        return function(visitItems) { 
+          processVisits(url, visitItems, historyItem); };
       };
-      chrome.history.getVisits({url: url}, processVisitsWithUrl(url, historyItems[i]));
+      chrome.history.getVisits({url: url}, 
+        processVisitsWithUrl(url, historyItems[i]));
       numRequestsOutstanding++;
     }
     if (!numRequestsOutstanding) {
@@ -100,24 +102,28 @@ function buildHistoryItemList(timeslice) {
     for (var i = 0, ie = visitItems.length; i < ie; ++i) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
+      
+      // TODO: convert timeOfVisit to a regular date.
+      timeOfVisit = historyItem.lastVisitTime;
 
       // a new, previously unseen rootDomain
       if (!visitObject[rootDomain]) {
         visitObject[rootDomain] = {
+          'key'   : rootDomain,
           'count' : 1, // this is the total count of all visits across all times
-          'times' : [{'series':rootDomain, 'x': historyItem.lastVisitTime, 'y':1}]
+          'values' : [{'series':rootDomain, 'x': timeOfVisit, 'y':1}]
         };
         sortedUrlArray.push(rootDomain);
       }
-      
-      lastIndex = visitObject[rootDomain].times.length - 1
+
+      lastIndex = visitObject[rootDomain].values.length - 1
 
       // a new, previously unseen time for a rootDomain visit 
-      if (visitObject[rootDomain].times[lastIndex]['x'] == historyItem.lastVisitTime) {
-        visitObject[rootDomain].times[lastIndex]['y'] += 1
-      } else {
-        var newVisit = {'series':rootDomain, 'x': historyItem.lastVisitTime, 'y':1}
-        visitObject[rootDomain].times.push(newVisit);
+      if (visitObject[rootDomain].values[lastIndex]['x'] == timeOfVisit) {
+        visitObject[rootDomain].values[lastIndex]['y'] += 1
+      } else { // update an existing rootDomain visit
+        var newVisit = {'series':rootDomain, 'x': timeOfVisit, 'y':1}
+        visitObject[rootDomain].values.push(newVisit);
       }
 
       // either way, update the rootDomain visit count
@@ -157,8 +163,8 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    */
   pieChartData = new Array();   // object to store pie chart data
   timeseriesData = new Array(); // object to store the timeseries data
-  console.log("visit object:")
-  console.log(visitObject)
+  // console.log("visit object:")
+  // console.log(visitObject)
 
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
@@ -187,25 +193,11 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     tmp.value = count;
     pieChartData.push(tmp);
 
-    // make timeseries objects and add them to the collection 
-    // TODO: Break into new function
-    var timeseriesObject = new Object();
-    timeseriesObject.color = "#ff7f0e"; // TODO: random color needed
-    timeseriesObject.key = url;
-
-    var pointArray = [];
-    for (var j = 0; j < visitObject[sortedUrlArray[i]].times.length; j++) {
-      var pointObject = new Object();
-      pointObject.series = i;
-      pointObject.x =  // date
-      pointObject.y =  // count-> do we have to sum all the same dates together? the graph api won't handle that?
-      pointArray.push(pointObject);
-    }
-    timeseriesObject.values = visitObject[sortedUrlArray[i]].times;
-    timeseriesData.push(timeseriesObject);
+    // timeseries data should be the top X objects from visitObject
+    timeseriesData.push(visitObject[url])
   }
   createPieChart(pieChartData);
-  createTimeseries(timeseriesData); // TODO: Implement this properly
+  createTimeseries(timeseriesData);
   hideLoadingIcon();
 }
 
@@ -246,8 +238,6 @@ var createPieChart = function(pieChartData) {
    *     formatted for the nvd3 pie chart library.
    */
   var data = pieChartData;
-  console.log("Pie Chart Data:");
-  console.log(data);
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
     .x(function(d) { return d.label })
@@ -304,10 +294,7 @@ function sinAndCos() {
 }
 
 var createTimeseries = function(timeseriesData) {
-  // TODO: Implement me.
-  console.log("timeseries data:")
-  console.log(timeseriesData);
-
+  console.log(timeseriesData)
   var chart = nv.models.lineChart()
                   .margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
                   .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
@@ -325,9 +312,10 @@ var createTimeseries = function(timeseriesData) {
       .tickFormat(d3.format('.02f'));
 
   /* Done setting the chart up? Time to render it!*/
-  var myData = sinAndCos();   //You need data...
-  console.log("fake data:")
-  console.log(myData)
+  // var myData = sinAndCos();   //You need data...
+  var myData = timeseriesData;
+  // console.log("fake data:")
+  // console.log(myData)
 
   d3.select('#timeseries-chart svg')    //Select the <svg> element you want to render the chart in.   
       .datum(myData)              //Populate the <svg> element with chart data...
