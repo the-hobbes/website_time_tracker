@@ -101,15 +101,27 @@ function buildHistoryItemList(timeslice) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
 
+      // a new, previously unseen rootDomain
       if (!visitObject[rootDomain]) {
         visitObject[rootDomain] = {
-          'count' : 0, // this is the total count of all visits across all times
-          'times' : [historyItem.lastVisitTime] // TODO: this needs to have time: count, not just time.
+          'count' : 1, // this is the total count of all visits across all times
+          'times' : [{'series':rootDomain, 'x': historyItem.lastVisitTime, 'y':1}]
         };
         sortedUrlArray.push(rootDomain);
       }
+      
+      lastIndex = visitObject[rootDomain].times.length - 1
+
+      // a new, previously unseen time for a rootDomain visit 
+      if (visitObject[rootDomain].times[lastIndex]['x'] == historyItem.lastVisitTime) {
+        visitObject[rootDomain].times[lastIndex]['y'] += 1
+      } else {
+        var newVisit = {'series':rootDomain, 'x': historyItem.lastVisitTime, 'y':1}
+        visitObject[rootDomain].times.push(newVisit);
+      }
+
+      // either way, update the rootDomain visit count
       visitObject[rootDomain].count++;
-      visitObject[rootDomain].times.push(historyItem.lastVisitTime);
     }
 
      /* If this is the final outstanding call to processVisits(),
