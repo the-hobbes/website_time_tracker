@@ -40,14 +40,14 @@ function buildHistoryItemList(timeslice) {
   var searchDepth = 0
 
   if (timeslice == WEEK) {
-    var microsecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    searchDepth = (new Date).getTime() - microsecondsPerWeek;
+    var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+    searchDepth = (new Date).getTime() - millisecondsPerWeek;
   } else if (timeslice == MONTH) {
-    var microsecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
-    searchDepth = (new Date).getTime() - microsecondsPerMonth; 
+    var millisecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
+    searchDepth = (new Date).getTime() - millisecondsPerMonth; 
   } else {
-    var microsecondsPerYear = 1000 * 60 * 60 * 24 * 360;
-    searchDepth = (new Date).getTime() - microsecondsPerYear; 
+    var millisecondsPerYear = 1000 * 60 * 60 * 24 * 360;
+    searchDepth = (new Date).getTime() - millisecondsPerYear; 
   }
 
    /* Track the number of callbacks from chrome.history.getVisits()
@@ -103,10 +103,9 @@ function buildHistoryItemList(timeslice) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
       
-      // TODO: convert timeOfVisit to a regular date.
-      timeOfVisit = historyItem.lastVisitTime;
+      timeOfVisit = historyItem.lastVisitTime
 
-      // a new, previously unseen rootDomain
+      // we have a new, previously unseen rootDomain
       if (!visitObject[rootDomain]) {
         visitObject[rootDomain] = {
           'key'   : rootDomain,
@@ -163,8 +162,6 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    */
   pieChartData = new Array();   // object to store pie chart data
   timeseriesData = new Array(); // object to store the timeseries data
-  // console.log("visit object:")
-  // console.log(visitObject)
 
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
@@ -261,68 +258,33 @@ var createPieChart = function(pieChartData) {
   });
 }
 
-function sinAndCos() {
-  var sin = [],sin2 = [],
-      cos = [];
-
-  //Data is represented as an array of {x,y} pairs.
-  for (var i = 0; i < 100; i++) {
-    sin.push({x: i, y: Math.sin(i/10)});
-    sin2.push({x: i, y: Math.sin(i/10) *0.25 + 0.5});
-    cos.push({x: i, y: .5 * Math.cos(i/10)});
-  }
-
-  //Line chart data should be sent as an array of series objects.
-  return [
-    {
-      values: sin,      //values - represents the array of {x,y} data points
-      key: 'Sine Wave', //key  - the name of the series.
-      color: '#ff7f0e'  //color - optional: choose your own line color.
-    },
-    {
-      values: cos,
-      key: 'Cosine Wave',
-      color: '#2ca02c'
-    },
-    {
-      values: sin2,
-      key: 'Another sine wave',
-      color: '#7777ff',
-      area: true      //area - set to true if you want this line to turn into a filled area chart.
-    }
-  ];
-}
-
 var createTimeseries = function(timeseriesData) {
   console.log(timeseriesData)
   var chart = nv.models.lineChart()
-                  .margin({left: 100})  //Adjust chart margins to give the x-axis some breathing room.
-                  .useInteractiveGuideline(true)  //We want nice looking tooltips and a guideline!
-                  .showLegend(true)       //Show the legend, allowing users to turn on/off line series.
-                  .showYAxis(true)        //Show the y-axis
-                  .showXAxis(true)        //Show the x-axis
-    ;
+                  .margin({left: 50})
+                  .useInteractiveGuideline(true)
+                  .showLegend(true)
+                  .showYAxis(true)
+                  .showXAxis(true);
 
-  chart.xAxis     //Chart x-axis settings
-      .axisLabel('Date')
-      .tickFormat(d3.format(',r'));
+  chart.xAxis
+      .axisLabel('Date (D-M-Y)')
+      .tickFormat(function(d) {
+          return d3.time.format('%d-%m-%y')(new Date(d))
+      });
+  chart.xScale(d3.time.scale());
 
-  chart.yAxis     //Chart y-axis settings
-      .axisLabel('Visits')
-      .tickFormat(d3.format('.02f'));
+  chart.yAxis
+      .axisLabel('Number of Visits')
+      .tickFormat(d3.format('d'));
 
-  /* Done setting the chart up? Time to render it!*/
-  // var myData = sinAndCos();   //You need data...
   var myData = timeseriesData;
-  // console.log("fake data:")
-  // console.log(myData)
 
-  d3.select('#timeseries-chart svg')    //Select the <svg> element you want to render the chart in.   
-      .datum(myData)              //Populate the <svg> element with chart data...
-      .call(chart);               //Finally, render the chart!
+  // render the chart
+  d3.select('#timeseries-chart svg')
+      .datum(myData)
+      .call(chart);
 
-  //Update the chart when window resizes.
-  nv.utils.windowResize(function() { chart.update() });
   return chart;
 }
 
