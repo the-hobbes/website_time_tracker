@@ -108,9 +108,9 @@ function buildHistoryItemList(timeslice) {
       // we have a new, previously unseen rootDomain
       if (!visitObject[rootDomain]) {
         visitObject[rootDomain] = {
-          'key'   : rootDomain,
-          'count' : 1, // this is the total count of all visits across all times
-          'values' : [{'series':rootDomain, 'x': timeOfVisit, 'y':1}]
+          'key'    : rootDomain,
+          'count'  : 1, // this is the total count of all visits across all times
+          'values' : [{'series':rootDomain, 'x': timeOfVisit, 'y':1}],
         };
         sortedUrlArray.push(rootDomain);
       }
@@ -259,31 +259,33 @@ var createPieChart = function(pieChartData) {
 }
 
 var createTimeseries = function(timeseriesData) {
-  console.log(timeseriesData)
+  // TODO: add docstring here.
+
   var chart = nv.models.lineChart()
-                  .margin({left: 50})
+                  // .margin({left: 50})
                   .useInteractiveGuideline(true)
                   .showLegend(true)
                   .showYAxis(true)
                   .showXAxis(true);
 
   chart.xAxis
-      .axisLabel('Date (D-M-Y)')
+      .orient("bottom")
       .tickFormat(function(d) {
-          return d3.time.format('%d-%m-%y')(new Date(d))
-      });
-  chart.xScale(d3.time.scale());
+          return d3.time.format('%d-%b-%y')(new Date(d))
+      })
+      .rotateLabels(-45);
 
   chart.yAxis
       .axisLabel('Number of Visits')
+      .orient("left")
       .tickFormat(d3.format('d'));
 
-  var myData = timeseriesData;
+  var myData = timeseriesData;      
 
   // render the chart
   d3.select('#timeseries-chart svg')
       .datum(myData)
-      .call(chart);
+      .call(chart)
 
   return chart;
 }

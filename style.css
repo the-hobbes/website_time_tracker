@@ -101,3 +101,7 @@ g.nv-slice:hover {
   float: left;
   margin-left: 13px;
 }
+
+#timeseries-chart svg {
+  font-size: 11px;
+}
