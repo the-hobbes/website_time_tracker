@@ -30,7 +30,11 @@ h2 {
   height:500px;
   position:fixed;
   z-index:9999;
-  background:url('spinner.gif') no-repeat center center rgba(0,0,0,0.25)
+  background:url('img/spinner.gif') no-repeat center center rgba(0,0,0,0.25)
+}
+svg {
+  width: 600px; 
+  height: 400px;
 }
 /* top-sites tab */
 #top-sites-content ol {
@@ -38,7 +42,7 @@ h2 {
   line-height: 2rem;
 }
 #top-sites-button {
-  width: 45%;
+  width: 30%;
   float: left;
   overflow: hidden; /* if you don't want #second to wrap below #first */
   border-bottom-color: #FCFCFC;
@@ -54,18 +58,14 @@ li {
 }
 /*pie-chart tab*/
 #pie-chart-button {
-  width: 45%;
+  width: 30%;
   float: right;
 }
 #pie-chart-content {
   width: auto;
   margin:0px auto;
 }
-/*pie chart specific*/
-#chart svg {
-  width: 600px; 
-  height: 400px;
-}
+/*chart specific*/
 .nvtooltip {
     font-size: 12px;
     margin: 10px;
@@ -93,4 +93,15 @@ g.nv-slice {
 g.nv-slice:hover {
   fill: black;
   stroke: black;
+}
+
+/*timeseries tab*/
+#timeseries-button {
+  width: 30%;
+  float: left;
+  margin-left: 13px;
+}
+
+#timeseries-chart svg {
+  font-size: 11px;
 }
