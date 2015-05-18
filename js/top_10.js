@@ -259,11 +259,16 @@ var createPieChart = function(pieChartData) {
 }
 
 var createTimeseries = function(timeseriesData) {
-  // TODO: add docstring here.
+  /**
+   * createTimeseries()
+   * Creates a timeseries with url data, using nvd3 libraries.
+   * @param {object} timeseriesData An object containing url-to-count mappings
+   *     as well as dates, formatted for the nvd3 pie chart library.
+   */
 
   var chart = nv.models.lineChart()
-                  // .margin({left: 50})
                   .useInteractiveGuideline(true)
+                  .tooltips(false)
                   .showLegend(true)
                   .showYAxis(true)
                   .showXAxis(true);
