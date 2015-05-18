@@ -181,7 +181,7 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     lineItemElement.appendChild(countText);
 
     // append each line item to the appropriate ol element
-    var orderedListElement = document.getElementById('top-sites-list');
+    var orderedListElement = document.getElementById(TOP_SITES_LIST_ID);
     orderedListElement.appendChild(lineItemElement);
 
     // this is massaged data for the pie chart
@@ -354,8 +354,12 @@ var addTimesliceListeners = function() {
   timesliceSelectBox.onchange = function (e) {
     var selectedOption = this[this.selectedIndex];
     var selectedValue = selectedOption.value;
-    var timesliceLabelDisplay = document.getElementsByClassName(TIME_LABEL_CLASS)[0];
-    timesliceLabelDisplay.innerHTML = selectedOption.innerText;
+    var timesliceLabelDisplays = document.getElementsByClassName(TIME_LABEL_CLASS);
+    console.log(document.getElementsByClassName(TIME_LABEL_CLASS))
+
+    for (var i = 0; i < timesliceLabelDisplays.length; i++) {
+      timesliceLabelDisplays[i].innerHTML = selectedOption.innerText;
+    };
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
     buildHistoryItemList(selectedValue);
