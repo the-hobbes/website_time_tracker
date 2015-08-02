@@ -1,6 +1,6 @@
 /**
   * File containing code to prepare and render the charts.
-  */ 
+  */
 
 var printTopResults = function(sortedUrlArray, visitObject) {
   /**
@@ -9,8 +9,8 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    * @param {array} sortedUrlArray An array of count-sorted Urls. 
    * @param {object} visitObject An object containing url to count mappings.
    */
-  pieChartData = new Array();   // object to store pie chart data
-  timeseriesData = new Array(); // object to store the timeseries data
+  pieChartData = [];   // object to store pie chart data
+  timeseriesData = []; // object to store the timeseries data
 
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
@@ -34,18 +34,18 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     orderedListElement.appendChild(lineItemElement);
 
     // this is massaged data for the pie chart
-    var tmp = new Object();
+    var tmp = {};
     tmp.label = url;
     tmp.value = count;
     pieChartData.push(tmp);
 
     // timeseries data should be the top X objects from visitObject
-    timeseriesData.push(visitObject[url])
+    timeseriesData.push(visitObject[url]);
   }
   createPieChart(pieChartData);
   createTimeseries(timeseriesData);
   hideLoadingIcon();
-}
+};
 
 var createDropShadowFilter = function() {
  /**
@@ -56,7 +56,7 @@ var createDropShadowFilter = function() {
   var defs = svg.append("defs");
 
   var filter = defs.append("filter")
-      .attr("id", "dropshadow")
+      .attr("id", "dropshadow");
 
   filter.append("feGaussianBlur")
       .attr("in", "SourceAlpha")
@@ -71,12 +71,12 @@ var createDropShadowFilter = function() {
   var feMerge = filter.append("feMerge");
 
   feMerge.append("feMergeNode")
-      .attr("in", "offsetBlur")
+      .attr("in", "offsetBlur");
   feMerge.append("feMergeNode")
       .attr("in", "SourceGraphic");
-}
+};
 
-var createPieChart = function(pieChartData) {  
+var createPieChart = function(pieChartData) {
   /**
    * createPieChart()
    * Creates a pie chart with url data, using nvd3 libraries.
@@ -86,13 +86,13 @@ var createPieChart = function(pieChartData) {
   var data = pieChartData;
   nv.addGraph(function() {
   var chart = nv.models.pieChart()
-    .x(function(d) { return d.label })
-    .y(function(d) { return d.value })
+    .x(function(d) { return d.label; })
+    .y(function(d) { return d.value; })
     .showLegend(true)
     .pieLabelsOutside(false)
     .labelType("percent")
-    .tooltipContent(function(key, y, e, graph) { return key + ', ' + 
-      e.value + ' visits.' })
+    .tooltipContent(function(key, y, e, graph) { return key + ', ' +
+      e.value + ' visits.'; })
     .labelThreshold(.05)
     .showLabels(true);
 
@@ -105,7 +105,7 @@ var createPieChart = function(pieChartData) {
     
   return chart;
   });
-}
+};
 
 var createTimeseries = function(timeseriesData) {
   /**
@@ -125,7 +125,7 @@ var createTimeseries = function(timeseriesData) {
   chart.xAxis
       .orient("bottom")
       .tickFormat(function(d) {
-          return d3.time.format('%d-%b-%y')(new Date(d))
+          return d3.time.format('%d-%b-%y')(new Date(d));
       })
       .rotateLabels(-45);
 
@@ -134,12 +134,12 @@ var createTimeseries = function(timeseriesData) {
       .orient("left")
       .tickFormat(d3.format('d'));
 
-  var myData = timeseriesData;      
+  var myData = timeseriesData;
 
   // render the chart
   d3.select('#timeseries-chart svg')
       .datum(myData)
-      .call(chart)
+      .call(chart);
 
   return chart;
-}
+};

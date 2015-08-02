@@ -1,6 +1,6 @@
 /**
   * File containing project constants. 
-  */ 
+  */
 
 // document identifiers
 var TOP_SITES_CONTENT_ID = 'top-sites-content';

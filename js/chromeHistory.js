@@ -13,17 +13,17 @@ function buildHistoryItemList(timeslice) {
   showLoadingIcon();
   
   if (typeof timeslice === 'undefined') { timeslice = WEEK; }
-  var searchDepth = 0
+  var searchDepth = 0;
 
   if (timeslice == WEEK) {
     var millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    searchDepth = (new Date).getTime() - millisecondsPerWeek;
+    searchDepth = (new Date()).getTime() - millisecondsPerWeek;
   } else if (timeslice == MONTH) {
     var millisecondsPerMonth = 1000 * 60 * 60 * 24 * 30;
-    searchDepth = (new Date).getTime() - millisecondsPerMonth; 
+    searchDepth = (new Date()).getTime() - millisecondsPerMonth;
   } else {
     var millisecondsPerYear = 1000 * 60 * 60 * 24 * 360;
-    searchDepth = (new Date).getTime() - millisecondsPerYear; 
+    searchDepth = (new Date()).getTime() - millisecondsPerYear;
   }
 
    /* Track the number of callbacks from chrome.history.getVisits()
@@ -49,17 +49,18 @@ function buildHistoryItemList(timeslice) {
           * @param {object} the historyItem object corresponding to the url.
           * @return {function} A closure to bind url+callback.
           */
-        return function(visitItems) { 
-          processVisits(url, visitItems, historyItem); };
+        return function(visitItems) {
+          processVisits(url, visitItems, historyItem);
+        };
       };
-      chrome.history.getVisits({url: url}, 
+      chrome.history.getVisits({url: url},
         processVisitsWithUrl(url, historyItems[i]));
       numRequestsOutstanding++;
     }
     if (!numRequestsOutstanding) {
       onAllVisitsProcessed();
     }
-  });  
+  });
 
   // Maps URLs to a count of the number of times the user visited that URL
   var visitObject = {};
@@ -79,7 +80,7 @@ function buildHistoryItemList(timeslice) {
       // get simple domains from a given url
       var rootDomain = new URL(url).hostname;
       
-      timeOfVisit = historyItem.lastVisitTime
+      timeOfVisit = historyItem.lastVisitTime;
 
       // we have a new, previously unseen rootDomain
       if (!visitObject[rootDomain]) {
@@ -91,13 +92,13 @@ function buildHistoryItemList(timeslice) {
         sortedUrlArray.push(rootDomain);
       }
 
-      lastIndex = visitObject[rootDomain].values.length - 1
+      lastIndex = visitObject[rootDomain].values.length - 1;
 
       // a new, previously unseen time for a rootDomain visit 
       if (visitObject[rootDomain].values[lastIndex]['x'] == timeOfVisit) {
-        visitObject[rootDomain].values[lastIndex]['y'] += 1
+        visitObject[rootDomain].values[lastIndex]['y'] += 1;
       } else { // update an existing rootDomain visit
-        var newVisit = {'series':rootDomain, 'x': timeOfVisit, 'y':1}
+        var newVisit = {'series':rootDomain, 'x': timeOfVisit, 'y':1};
         visitObject[rootDomain].values.push(newVisit);
       }
 
@@ -125,6 +126,6 @@ function buildHistoryItemList(timeslice) {
      return visitObject[b].count - visitObject[a].count;
    });
 
-   printTopResults(sortedUrlArray, visitObject);  
+   printTopResults(sortedUrlArray, visitObject);
   };
 }

@@ -1,6 +1,6 @@
 /**
   * File containing event and flow control logic. 
-  */ 
+  */
 
 var addListeners = function() {
   /**
@@ -9,7 +9,7 @@ var addListeners = function() {
    */
   addTabChangeListeners();
   addTimesliceListeners();
-}
+};
 
 var addTabChangeListeners = function(){
   /**
@@ -21,20 +21,20 @@ var addTabChangeListeners = function(){
   var timeseriesButton = document.getElementById(TIMESERIES_BUTTON_ID);
 
   topSitesButton.addEventListener('click', function(){
-    showHiddenContent(ACTIVE_TAB, TOP_SITES_CONTENT_ID, 
+    showHiddenContent(ACTIVE_TAB, TOP_SITES_CONTENT_ID,
                       topSitesButton, ACTIVE_BUTTON);
   });
 
   pieChartButton.addEventListener('click', function() {
-    showHiddenContent(ACTIVE_TAB, PIE_CHART_CONTENT_ID, 
+    showHiddenContent(ACTIVE_TAB, PIE_CHART_CONTENT_ID,
                       pieChartButton, ACTIVE_BUTTON);
-  })
+  });
 
   timeseriesButton.addEventListener('click', function() {
-    showHiddenContent(ACTIVE_TAB, TIMESERIES_CONTENT_ID, 
+    showHiddenContent(ACTIVE_TAB, TIMESERIES_CONTENT_ID,
                       timeseriesButton, ACTIVE_BUTTON);
-  })
-}
+  });
+};
 
 var clearCurrentContents = function(targetNode) {
   /**
@@ -49,7 +49,7 @@ var clearCurrentContents = function(targetNode) {
       node.removeChild(node.firstChild);
     }
   }
-}
+};
 
 var addTimesliceListeners = function() {
   /**
@@ -62,20 +62,20 @@ var addTimesliceListeners = function() {
     var selectedOption = this[this.selectedIndex];
     var selectedValue = selectedOption.value;
     var timesliceLabelDisplays = document.getElementsByClassName(TIME_LABEL_CLASS);
-    console.log(document.getElementsByClassName(TIME_LABEL_CLASS))
+    console.log(document.getElementsByClassName(TIME_LABEL_CLASS));
 
     for (var i = 0; i < timesliceLabelDisplays.length; i++) {
       timesliceLabelDisplays[i].innerHTML = selectedOption.innerText;
-    };
+    }
     targetNode = TOP_SITES_LIST_ID;
     clearCurrentContents(targetNode);
     buildHistoryItemList(selectedValue);
-  }
-}
+  };
+};
 
-var showHiddenContent = function(currentContent, 
-                                 targetContent, 
-                                 callingButton, 
+var showHiddenContent = function(currentContent,
+                                 targetContent,
+                                 callingButton,
                                  currentButtonId) {
   /**
    * showHiddenContent()
@@ -103,7 +103,7 @@ var showHiddenContent = function(currentContent,
   ACTIVE_TAB = targetContent;
   // the id of the button that was clicked on is the new active button
   ACTIVE_BUTTON = event.target.id;
-}
+};
 
 var hideContent = function(currentContent, currentButton) {
   /**
@@ -114,11 +114,11 @@ var hideContent = function(currentContent, currentButton) {
    * @param {element} currentButton A DOM element representing the currently
    *     active button.
    */
-  var toHide = document.getElementById(currentContent);  
+  var toHide = document.getElementById(currentContent);
   toHide.style.display = 'none';
   currentButton.style.borderBottomColor = BORDER_COLOR;
   currentButton.style.backgroundColor = DORMANT_BACKGROUND_COLOR;
-}
+};
 
 var showLoadingIcon = function() {
   /**
@@ -128,7 +128,7 @@ var showLoadingIcon = function() {
    */
   var loadingIcon = document.getElementById(LOADING_ICON_ID);
   loadingIcon.style.display = 'block';
-}
+};
 
 var hideLoadingIcon = function() {
   /**
@@ -138,7 +138,7 @@ var hideLoadingIcon = function() {
    */
   var loadingIcon = document.getElementById(LOADING_ICON_ID);
   loadingIcon.style.display = 'none';
-}
+};
 
 document.addEventListener('DOMContentLoaded', function () {
   /**
@@ -148,6 +148,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // add event listeners to elements
   addListeners();
   // begin querying the history API and setting up the page
-  buildHistoryItemList(); 
+  buildHistoryItemList();
 });
 
