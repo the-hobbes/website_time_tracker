@@ -18,7 +18,6 @@ var addTabChangeListeners = function(){
    */
   var topSitesButton = document.getElementById(TOP_SITES_BUTTON_ID);
   var pieChartButton = document.getElementById(PIE_CHART_BUTTON_ID);
-  var timeseriesButton = document.getElementById(TIMESERIES_BUTTON_ID);
 
   topSitesButton.addEventListener('click', function(){
     showHiddenContent(ACTIVE_TAB, TOP_SITES_CONTENT_ID,
@@ -30,10 +29,6 @@ var addTabChangeListeners = function(){
                       pieChartButton, ACTIVE_BUTTON);
   });
 
-  timeseriesButton.addEventListener('click', function() {
-    showHiddenContent(ACTIVE_TAB, TIMESERIES_CONTENT_ID,
-                      timeseriesButton, ACTIVE_BUTTON);
-  });
 };
 
 var clearCurrentContents = function(targetNode) {

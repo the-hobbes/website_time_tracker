@@ -10,7 +10,6 @@ var printTopResults = function(sortedUrlArray, visitObject) {
    * @param {object} visitObject An object containing url to count mappings.
    */
   pieChartData = [];   // object to store pie chart data
-  timeseriesData = []; // object to store the timeseries data
 
   for (var i =0; i < TOP_X; i++) {
     url = sortedUrlArray[i];
@@ -39,11 +38,8 @@ var printTopResults = function(sortedUrlArray, visitObject) {
     tmp.value = count;
     pieChartData.push(tmp);
 
-    // timeseries data should be the top X objects from visitObject
-    timeseriesData.push(visitObject[url]);
   }
   createPieChart(pieChartData);
-  createTimeseries(timeseriesData);
   hideLoadingIcon();
 };
 
@@ -105,41 +101,4 @@ var createPieChart = function(pieChartData) {
     
   return chart;
   });
-};
-
-var createTimeseries = function(timeseriesData) {
-  /**
-   * createTimeseries()
-   * Creates a timeseries with url data, using nvd3 libraries.
-   * @param {object} timeseriesData An object containing url-to-count mappings
-   *     as well as dates, formatted for the nvd3 pie chart library.
-   */
-
-  var chart = nv.models.lineChart()
-                  .useInteractiveGuideline(true)
-                  .tooltips(false)
-                  .showLegend(true)
-                  .showYAxis(true)
-                  .showXAxis(true);
-
-  chart.xAxis
-      .orient("bottom")
-      .tickFormat(function(d) {
-          return d3.time.format('%d-%b-%y')(new Date(d));
-      })
-      .rotateLabels(-45);
-
-  chart.yAxis
-      .axisLabel('Number of Visits')
-      .orient("left")
-      .tickFormat(d3.format('d'));
-
-  var myData = timeseriesData;
-
-  // render the chart
-  d3.select('#timeseries-chart svg')
-      .datum(myData)
-      .call(chart);
-
-  return chart;
 };

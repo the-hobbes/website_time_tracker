@@ -59,7 +59,7 @@ li {
 /*pie-chart tab*/
 #pie-chart-button {
   width: 30%;
-  float: right;
+  float: left;
 }
 #pie-chart-content {
   width: auto;
@@ -93,15 +93,4 @@ g.nv-slice {
 g.nv-slice:hover {
   fill: black;
   stroke: black;
-}
-
-/*timeseries tab*/
-#timeseries-button {
-  width: 30%;
-  float: left;
-  margin-left: 13px;
-}
-
-#timeseries-chart svg {
-  font-size: 11px;
 }
